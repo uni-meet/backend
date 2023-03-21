@@ -1,0 +1,12 @@
+{
+  "scripts": {
+    "prebuild": "tslint -c tslint.json -p tsconfig.json --fix",
+    "build": "tsc",
+    "prestart": "npm run build",
+    "start": "node ."
+  },
+  "main": "dist/index.js",
+  "devDependencies": {
+    "tslint": "^6.1.3"
+  }
+}
