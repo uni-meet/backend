@@ -1,45 +1,57 @@
-import express from 'express';
+import express, { Express, Application, Request, Response } from 'express';
+import * as http from 'http';
 import cors from 'cors';
 import * as dotenv from "dotenv";
 import mongoose from 'mongoose';
-const http = require("http").createServer(express)
-const io = require("socket.io")(http)
+import { RouteConfig  } from './Common/config/route';
+import { UserRoutes } from './User/route';
+const routes: Array<RouteConfig> = []
 
 const app: Express = express();
-const PORT: any = process.env || 8081;
-const uri = `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@atlascluster.rtquvey.mongodb.net/${process.env.MONGO_DB}`
-
-
-mongoose
-    .connect(uri)
-    .then(() =>
-        app.listen(PORT, () =>
-            console.log(`Server running on http://localhost:${PORT}`)
-        )
-    )
-    .catch((error) => {
-        throw error
-    })
-
-dotenv.config()
-
-
-mongoose
-    .connect(uri)
-    .then(() =>
-        app.listen(PORT, () =>
-            console.log(`Server running on http://localhost:${PORT}`)
-        )
-    )
-    .catch((error) => {
-        throw error
-    })
+dotenv.config({})
 app.use(cors())
 app.use(express.json())
-app.use("/api/user", userRouter);
-app.use("/api/post", PostRouter)
-// declare a route with a response
-app.get('/', (req, res) => {
+
+
+// const io = require("socket.io")(http)
+
+
+
+
+
+const PORT: any = process.env || 8081;
+if (process.env.DEBUG) {
+    process.on("unhandledRejection", function(reason){
+        process.exit(1)
+    })
+} else {
+}
+routes.push(new UserRoutes(app))
+
+app.get('/', (req: Request, res: Response) => {
     res.send("What's up doc ?!");
 });
+const server: http.Server = http.createServer(app)
+server.listen(PORT, () => {
+    console.log(`Server running on http://localhost:${PORT}`)
+routes.forEach((route:RouteConfig)=>{
+    console.log(`Routes configured for ${route.getName()}`)
+})
+})
+// const uri = `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@atlascluster.rtquvey.mongodb.net/${process.env.MONGO_DB}`
+// mongoose
+//     .connect(uri)
+//     .then(() =>
+//         app.listen(PORT, () =>
+//             console.log(`Server running on http://localhost:${PORT}`)
+//         )
+//     )
+//     .catch((error) => {
+//         throw error
+//     })
+
+
+// app.use("/api/user", userRouter);
+// app.use("/api/post", PostRouter)
+
 
