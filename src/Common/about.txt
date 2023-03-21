@@ -1,0 +1,6 @@
+This folder contains the common functionality
+1.Route Configuration - It handles all the routes for the particular module. For example, if we have a user module. It handles all the GET, POST, PUT for the user module.
+2.Controller - It manages the business logic for each endpoint. It can be fetching the users, updating the user details, etc.
+3.Services - It handles the connection with database models and performing queries, and return that data to Controller.
+4.Model - Here, we define our mongoose schema, which is an ODM for MongoDB. We can also use sequelize to handle Postgres, MySQL.
+5.Interface - it helps us to define custom data types.
