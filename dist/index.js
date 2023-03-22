@@ -50,7 +50,7 @@ app.get('/', (req, res) => {
     res.send("What's up doc ?!");
 });
 const server = http.createServer(app);
-server.listen(PORT, () => {
+server.listen(8081, () => {
     console.log(`Server running on http://localhost:${PORT}`);
     routes.forEach((route) => {
         console.log(`Routes configured for ${route.getName()}`);

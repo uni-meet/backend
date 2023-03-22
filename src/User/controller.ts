@@ -3,7 +3,7 @@ class UserController {
     constructor() {
 
     }
-    async getUsers(req: any, res: Response, next: NextFunction) {
+    async getUsers(req: Request, res: Response, next: NextFunction) {
         return res.status(200).json({
             success: true,
             data: [
@@ -17,4 +17,4 @@ class UserController {
         })
     }
 }
-export { UserController }
+export default new UserController()

@@ -1,6 +1,6 @@
 import { RouteConfig } from "../Common/config/route"
-import express, { Application, Request, Response } from "express"
-import { UserController } from "./controller"
+import express, { Express, Application, Request, Response } from "express"
+import UserController from "./controller"
 
 export class UserRoutes extends RouteConfig {
     constructor(app: Application) {
@@ -11,9 +11,3 @@ export class UserRoutes extends RouteConfig {
         return this.app
     }
 }
-
-let a = ['a']
-
-let func1 = () => {}
-
-let func2 = [() => {}]
