@@ -1,3 +1,4 @@
+// Database operations ( Server interacts with database)
 import User from "../User/model"
 import { IUser } from "../User/user_interface"
 

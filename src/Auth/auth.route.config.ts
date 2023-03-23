@@ -1,5 +1,7 @@
-import { Application } from "express";
+// Authentication route configuration ( to post the login and signup functions )
+import { Application, Request, Response } from "express";
 import { RouteConfig } from "../Common/config/route";
+import  AuthController  from "./auth.controller"
 
 
 export class AuthRoutes extends RouteConfig {
