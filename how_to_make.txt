@@ -1,1 +1,4 @@
 https://cloudnweb.dev/2021/05/express-typescript-basic-auth/ --basic authentification using Typescript
+https://developer.mozilla.org/en-US/docs/Learn/Server-side/Express_Nodejs/deployment - hosting of website
+https://northflank.com/guides/connecting-to-a-mongo-db-database-using-node-js -- connection of mongoDB
+https://medium.com/swlh/creating-connecting-a-mongodb-database-and-node-js-server-to-a-front-end-6a53d400ae6a --connecting to mongoDB cluster
