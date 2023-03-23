@@ -1,8 +1,8 @@
 // Interaction with service and database and sends it to service using route configuration
 import { NextFunction, Request, Response } from "express";
-import AuthService from "../Auth/auth.service"
+import AuthService from "./auth.service"
 import debug, { IDebugger } from "debug";
-import Password from "../Common/services/password" 
+import { Password } from "../common/services/password"
 import jwt from "jsonwebtoken"
 const log: IDebugger = debug("auth: controller");
 const jwtSecret: string = process.env.JWT_SECRET || "123456"

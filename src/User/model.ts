@@ -1,10 +1,10 @@
 // Create a user model to interact with MongoDB users collection
-import MongooseService from "../Common/services/mongoose"
+import MongooseService from "../common/services/mongoose"
 import { model, Model, Schema, Document } from "mongoose"
 import { IUser } from "./user_interface"
 import { scrypt, randomBytes } from "crypto"
 import { promisify } from "util"
-import { Password } from "../Common/services/password"
+import { Password } from "../common/services/password"
 const scryptAsync = promisify(scrypt)
 
 
@@ -17,26 +17,26 @@ interface UserModel extends Model<UserDocument> {
     build(attrs: IUser): UserDocument
 }
 
-const UserSchema : Schema  = new Schema (
-{
-    email: { type: String, required: true},
-    password:{ type: String, required: true },
+const UserSchema: Schema = new Schema(
+    {
+        email: { type: String, required: true },
+        password: { type: String, required: true },
         username: { type: String, required: true },
-},
-{
-   toObject: {
-transform: function (doc, ret) {},
-   },
-   toJSON: { 
-transform: function (doc,ret) {
-    delete ret.password
-}
-   } 
-}
+    },
+    {
+        toObject: {
+            transform: function (doc, ret) { },
+        },
+        toJSON: {
+            transform: function (doc, ret) {
+                delete ret.password
+            }
+        }
+    }
 
 )
 
-UserSchema.pre("save", async function (done){
+UserSchema.pre("save", async function (done) {
     if (this.isModified("password")) {
         const hashed = await Password.toHash(this.get("password"))
         this.set("password", hashed)
@@ -47,7 +47,7 @@ UserSchema.pre("save", async function (done){
 UserSchema.statics.build = (attrs: IUser) => {
     return new User(attrs)
 }
-const User = MongooseService.getInstance().model<UserDocument,UserModel>(
+const User = MongooseService.getInstance().model<UserDocument, UserModel>(
     "User",
     UserSchema
 )

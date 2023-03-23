@@ -1,21 +1,21 @@
 import express, { Express, Application, Request, Response } from 'express';
 import * as http from 'http';
-import cors  from "cors";
+import cors from "cors";
 import * as dotenv from "dotenv";
-import { RouteConfig  } from './Common/config/route';
-import { UserRoutes } from './User/route';
-import { AuthRoutes } from './Auth/auth.route.config';
+import { RouteConfig } from './common/config/route';
+import { UserRoutes } from './user/route';
+import { AuthRoutes } from './auth/auth.route.config';
 import mongoose from 'mongoose';
 import debug, { IDebugger } from 'debug';
-import { IUser } from './User/user_interface';
+import { IUser } from './user/user_interface';
 
 const app: Express = express();
 const routes: Array<RouteConfig> = []
 
 declare global {
     namespace Express {
-        interface Request { 
-            user? : IUser;
+        interface Request {
+            user?: IUser;
         }
     }
 }
@@ -31,26 +31,26 @@ const PORT: any = process.env || 8081;
 const debugLog: IDebugger = debug("app")
 
 if (process.env.DEBUG) {
-    process.on("unhandledRejection", function(reason){
+    process.on("unhandledRejection", function (reason) {
         debug.log("unhandledRejection:", reason)
         process.exit(1)
     })
 } else {
 }
 routes.push(new UserRoutes(app))
-routes.push( new AuthRoutes(app))
+routes.push(new AuthRoutes(app))
 
 // app.get('/', (req: Request, res: Response) => {
 //     res.send("What's up doc ?!");
 // });
 
 const server: http.Server = http.createServer(app)
-server.listen(PORT, () => {
-    console.log(`Server running on http://localhost:${PORT}`)
+server.listen(8081, () => {
+    console.log(`Server running on http://localhost:8081`)
 
-    routes.forEach((route:RouteConfig)=>{
-    console.log(`Routes configured for ${route.getName()}`)
-})
+    routes.forEach((route: RouteConfig) => {
+        console.log(`Routes configured for ${route.getName()}`)
+    })
 })
 
 
