@@ -3,8 +3,8 @@ import { model, Model, Schema, Document } from "mongoose"
 import { IUser } from "./user_interface"
 import { scrypt, randomBytes } from "crypto"
 import { promisify } from "util"
-// import { Password } from 
-// const scryptAsync = promisify(scrypt)
+import { Password } from 
+const scryptAsync = promisify(scrypt)
 
 
 export interface UserDocument extends Document {
