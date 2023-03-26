@@ -2,3 +2,12 @@ https://cloudnweb.dev/2021/05/express-typescript-basic-auth/ --basic authentific
 https://developer.mozilla.org/en-US/docs/Learn/Server-side/Express_Nodejs/deployment - hosting of website
 https://northflank.com/guides/connecting-to-a-mongo-db-database-using-node-js -- connection of mongoDB
 https://medium.com/swlh/creating-connecting-a-mongodb-database-and-node-js-server-to-a-front-end-6a53d400ae6a --connecting to mongoDB cluster
+
+-login a user
+- create a Postgresql db 
+- get the user`s data from database and to show it as one person on page
+- add like and hide user function
+- if the user is liked, create a "list of liked users"
+- if the user is disliked, create a " list of disliked users"
+- create endpoints for different interactions with user
+

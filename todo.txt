@@ -1,0 +1,6 @@
+create a model for user
+accomplish model for pictures
+create controllers for user and pictures
+create endpoints for getting whole info about user and his  pictures
+create  functions for getting user info, updating user info, getting user`s ID
+

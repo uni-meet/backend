@@ -2,7 +2,7 @@
 import { NextFunction, Request, Response } from "express";
 import AuthService from "./auth.service"
 import debug, { IDebugger } from "debug";
-import { Password } from "../common/services/password"
+import { Password } from "../services/password"
 import jwt from "jsonwebtoken"
 const log: IDebugger = debug("auth: controller");
 const jwtSecret: string = process.env.JWT_SECRET || "123456"

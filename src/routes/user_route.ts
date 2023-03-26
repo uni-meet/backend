@@ -1,6 +1,6 @@
-import { RouteConfig } from "../common/config/route"
+import { RouteConfig } from "./route"
 import express, { Express, Application, Request, Response } from "express"
-import UserController from "./controller"
+import UserController from "../controllers/user_controller"
 
 export class UserRoutes extends RouteConfig {
     constructor(app: Application) {

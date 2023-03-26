@@ -1,10 +1,10 @@
 // Create a user model to interact with MongoDB users collection
-import MongooseService from "../common/services/mongoose"
+import MongooseService from "../config/common/services/postgresql"
 import { model, Model, Schema, Document } from "mongoose"
-import { IUser } from "./user_interface"
+import { IUser } from "../user_interface"
 import { scrypt, randomBytes } from "crypto"
 import { promisify } from "util"
-import { Password } from "../common/services/password"
+import { Password } from "../config/common/services/password"
 const scryptAsync = promisify(scrypt)
 
 

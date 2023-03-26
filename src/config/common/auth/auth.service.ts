@@ -1,6 +1,6 @@
 // Database operations ( Server interacts with database)
-import User from "../user/model"
-import { IUser } from "../user/user_interface"
+import User from "../../../controllers/user_model"
+import { IUser } from "../../../user_interface"
 
 class AuthService {
     async createUser(data: IUser) {
