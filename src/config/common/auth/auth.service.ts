@@ -1,5 +1,5 @@
 // Database operations ( Server interacts with database)
-import User from "../../../controllers/user_model"
+import User from "../../../models/user_model"
 import { IUser } from "../../../user_interface"
 
 class AuthService {
