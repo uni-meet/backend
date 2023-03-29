@@ -5,7 +5,7 @@
 
 // import dependencies
 import { Connection, connection } from "mongoose";
-import { debuglog } from "./";
+import { debuglog } from ".";
 import { GridFsStorage } from "multer-gridfs-storage/lib/gridfs";
 import multer from "multer";
 
@@ -24,7 +24,7 @@ const storage = new GridFsStorage({
     url: url,
     file: (req, file) => {
         return {
-            bucketName:'images00',
+            bucketName: 'images00',
             filename: new Date().toISOString() + file.originalname
         }
     }

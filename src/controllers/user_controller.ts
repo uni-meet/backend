@@ -10,10 +10,9 @@
  * admin updateUserPassword ?
  */
 import { Request, Response, NextFunction } from "express";
-import { debuglog } from "./../helpers/debuglog";
-import { User } from "./../models/user_model";
+import { debuglog, createToken } from "../helpers"
+import { User } from "../models";
 import mongoose from "mongoose";
-import { ObjectId } from "mongodb";
 class UserController {
     constructor() {
 
@@ -194,10 +193,11 @@ export function updateUserInfo(req: Request, res: Response) {
             body[key] = req.body[key].toLowerCase()
             continue
         }
+        // convert the updated data from request to body to send it to db
+        body[key] = body.req[key]
+        // if key length is 0, return error
     }
-    // convert the updated data from request to body to send it to db
-    body[key] = body.req[key]
-    // if key length is 0, return error 
+
     if (Object.keys(body).length == 0) {
         debuglog('ERROR', 'user controller - updateUserInfo', 'nothing to update')
         res.status(400).json({ result: "error", message: "Nothing to update" })

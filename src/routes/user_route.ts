@@ -1,4 +1,4 @@
-import { RouteConfig } from "./route"
+import { RouteConfig } from "./router"
 import express, { Express, Application, Request, Response } from "express"
 import UserController from "../controllers/user_controller"
 
