@@ -23,7 +23,7 @@ Content-Type: application/json
 }
 
 ### Get Info of  user
-GET   http://localhost:8081/user/getInfo/{642563d03d296424b95ac5dc}  HTTP/1.1
+GET   http://localhost:8081/users?id={642563d03d296424b95ac5dc}  HTTP/1.1
 
 
 ### Get username of user

@@ -5,7 +5,7 @@ import express, { Express, Application, Request, Response } from 'express';
 import dotenv from 'dotenv'
 import body_parser from 'body-parser'
 
-import { connectDB } from './config/config';
+import { connectDB } from './config';
 import { debuglog } from './helpers/debuglog';
 import { router } from './routes';
 const app: Application = express();

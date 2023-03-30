@@ -3,7 +3,7 @@ The cluster connects to the server via the Mongoose package. */
 
 // import dependencies
 import { connect, Connection, connection } from "mongoose";
-import { debuglog } from '../../helpers/debuglog';
+import { debuglog } from '../helpers/debuglog';
 
 
 
