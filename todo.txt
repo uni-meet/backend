@@ -4,3 +4,5 @@ create controllers for user and pictures
 create endpoints for getting whole info about user and his  pictures
 create  functions for getting user info, updating user info, getting user`s ID
 
+https://cloud.mongodb.com/v2/641c7405b77671149b020fcd#/dataAPI -- database
+https://github.com/jaeyoungchang5/share-my-sunset -- sample

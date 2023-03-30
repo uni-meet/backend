@@ -1,0 +1,36 @@
+### Get tasks
+# https://localhost:PORT/api/ENDPOINTS
+
+### Signup a new user
+POST http://localhost:8081/api/signup HTTP/1.1
+Content-Type: application/json
+
+{
+    "firstName" : "John",
+    "lastName" : "Dave",
+    "username" : "john-dave",
+    "password" : "1234",
+    "bio" : "Hey everybody!"
+}
+
+### Login a new user
+POST http://localhost:8081/api/login  HTTP/1.1
+Content-Type: application/json
+
+{ 
+    "username" : "john-dave",
+    "password" : "1234"
+}
+
+### Get Info of  user
+GET   http://localhost:8081/user/getInfo/{642563d03d296424b95ac5dc}  HTTP/1.1
+
+
+### Get username of user
+GET   http://localhost:8081/users/getUserUserName/642563d03d296424b95ac5dc HTTP/1.1
+
+
+
+// with deployment link will be https
+// test endpoints of API
+// create a documentation for api

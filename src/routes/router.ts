@@ -20,9 +20,9 @@ router.get('/test', (req: Request, res: Response): void => {
 // users
 router.post('/signup', userCtrl.signup)
 router.post('/login', userCtrl.login)
-router.post('/user/getInfo', userCtrl.getUserInfo)
-router.post('/user/getUserUserName', userCtrl.getUserUsername)
-router.post('/user/updateUserInfo', userCtrl.updateUserInfo)
-router.post('/user/updateUserPassword', userCtrl.updateUserPassword)
-router.post('/user/deleteUser', userCtrl.deleteUser)
+router.get('/user/getInfo/:id', userCtrl.getUserInfo)
+router.post('/user/getUserUserName/', userCtrl.getUserUsername)
+router.put('/user/updateUserInfo', userCtrl.updateUserInfo)
+router.put('/user/updateUserPassword', userCtrl.updateUserPassword)
+router.delete('/user/deleteUser', userCtrl.deleteUser)
 export { router }

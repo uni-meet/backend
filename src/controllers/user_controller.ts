@@ -65,8 +65,12 @@ export function signup(req: Request, res: Response): void {
             const token = createToken(newUser)
             res.status(201).json({ result: "success", message: "User signup" })
         }).catch((error) => {
+            if (error.code == 11000) {
+                return res.status(400).json({ result: 'failed', message: 'User already exists' })
+            }
             debuglog('LOG', 'user controller - signup', 'signup fail')
-            res.status(400).json(error)
+            console.log(error)
+            res.status(500).json({ result: 'failed', message: 'Server error' })
         })
 }
 
@@ -140,6 +144,20 @@ export function getUserInfo(req: Request, res: Response) {
         })
 }
 
+// // test function to get user info by id
+// let findUsers = async (req: Request, res: Response) => {
+//     try {
+//         const user = await User.findById(req.params.id);
+//         if (!user) {
+//             return res.status(404).json({ error: 'User not found' });
+//         }
+//         res.json(user);
+//     } catch (err) {
+//         res.status(500).json({ error: Error });
+//     }
+// };
+// export { findUsers }
+
 /**
  * @function get username for user with user`s id
  * @param {ObjectId} req.body.userId User`s id
@@ -167,6 +185,10 @@ export function getUserUsername(req: Request, res: Response) {
             return
         })
 }
+
+
+
+
 /**
  * @function updateUserInfo without password
  * @param {ObjectId} req.body.userId User`s id
