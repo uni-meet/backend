@@ -1,4 +1,4 @@
-## This is a backend folder for the uni-meet project.
+## This is a backend folder for the blog project.
 
 ## Technology
 
@@ -33,4 +33,4 @@ This backend is created with:
 
 ## Useful links
 
-p.s. API documentation is coming. The endpoints can be found via src/routes/router.ts
+p.s. API documentation is coming. The endpoints can be found via `src/routes/router.ts`
