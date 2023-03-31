@@ -18,11 +18,12 @@ router.get('/test', (req: Request, res: Response): void => {
     res.json({ 'result': ' router test success' })
 })
 // users
+// Herema
 router.post('/signup', userCtrl.signup)
 router.post('/login', userCtrl.login)
 router.get('/user/getInfo/:id', userCtrl.getUserInfo)
 router.post('/user/getUserUserName/', userCtrl.getUserUsername)
 router.put('/user/updateUserInfo', userCtrl.updateUserInfo)
-router.put('/user/updateUserPassword', userCtrl.updateUserPassword)
+router.patch('/user/updateUserPassword', userCtrl.updateUserPassword)
 router.delete('/user/deleteUser', userCtrl.deleteUser)
 export { router }
