@@ -7,6 +7,8 @@ import { debuglog } from "../helpers/debuglog";
 const router: Router = express.Router() // activate router
 // DEPENDENCIES
 import * as userCtrl from "../controllers/user_controller"
+import * as pictureCtrl from "../controllers/picture_controller"
+import { upload } from "../config";
 
 
 
@@ -39,3 +41,8 @@ router.delete('/user/deleteUser', userCtrl.deleteUser)
 export { router }
 
 // pictures API endpoints 
+router.post('/picture', upload.single('pictureImage'), pictureCtrl.sharePicture)
+router.get('/picture/getPictureById/:id', pictureCtrl.getPictureById)
+router.get('/picture/getPictureIdByUserId/:id', pictureCtrl.getPictureIdByUserId)
+router.delete('/picture/deletePicture/:id', pictureCtrl.deletePicture)
+router.patch('/picture/updatePictureCaption/:id', pictureCtrl.updatePictureCaption)
