@@ -56,7 +56,7 @@ There are two models in project:
 
 Tasks:
 
-- :U+1F525: create an endpoint to get All users info from db (for main page)
+- :fire: create an endpoint to get All users info from db (for main page)
 - test endpoints with REST API
 - create documentation for API endpoints for frontend devs
 - host backend,database, API
