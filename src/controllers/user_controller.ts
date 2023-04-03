@@ -322,7 +322,16 @@ export function deleteUser(req: Request, res: Response) {
         })
 }
 /** OPTIONAL
+ * @function Get all users from database
+ * 
+ * @param {ObjectId} req.body.userId User`s id
+ */
+
+
+
+/** OPTIONAL
  * @function Update user password by admin 
  * 
  * @param {ObjectId} req.body.userId User`s id
  */
+

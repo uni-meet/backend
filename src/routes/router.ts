@@ -34,15 +34,20 @@ router.get('/test', (req: Request, res: Response): void => {
 router.post('/signup', userCtrl.signup)
 router.post('/login', userCtrl.login)
 router.get('/user/getInfo/:id', userCtrl.getUserInfo)
-router.post('/user/getUserUserName/', userCtrl.getUserUsername)
-router.put('/user/updateUserInfo', userCtrl.updateUserInfo)
-router.patch('/user/updateUserPassword', userCtrl.updateUserPassword)
-router.delete('/user/deleteUser', userCtrl.deleteUser)
-export { router }
+router.get('/user/getUserUserName/:id', userCtrl.getUserUsername)
+router.put('/user/updateUserInfo/:id', userCtrl.updateUserInfo)
+router.put('/user/updateUserPassword/:id', userCtrl.updateUserPassword)
+router.delete('/user/deleteUser/:id', userCtrl.deleteUser)
+
 
 // pictures API endpoints 
 router.post('/picture', upload.single('pictureImage'), pictureCtrl.sharePicture)
 router.get('/picture/getPictureById/:id', pictureCtrl.getPictureById)
 router.get('/picture/getPictureIdByUserId/:id', pictureCtrl.getPictureIdByUserId)
 router.delete('/picture/deletePicture/:id', pictureCtrl.deletePicture)
-router.patch('/picture/updatePictureCaption/:id', pictureCtrl.updatePictureCaption)
+router.put('/picture/updatePictureCaption/:id', pictureCtrl.updatePictureCaption)
+
+// create a post feed of all users
+router.get('/users-posts', pictureCtrl.getAllPosts)
+
+export { router }

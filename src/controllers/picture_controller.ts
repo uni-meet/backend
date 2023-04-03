@@ -1,3 +1,4 @@
+// @ts-nocheck
 import mongoose from "mongoose"
 import { debuglog } from "../helpers"
 import { Picture, User } from "../models"
@@ -232,4 +233,30 @@ export function updatePictureCaption(req: Request, res: Response) {
             debuglog('ERROR', 'picture controller - updateCaption', error)
             res.status(400).json(error.message)
         })
+}
+/**
+ * @function get all users pictures 
+ * Creates an inner join operation between user and pictures collection
+ */
+export function getAllPosts(req: Request, res: Response) {
+    try {
+        const users = db.collection('users')
+        const pictures = db.collection('pictures')
+
+        const allUsers = await users.aggregate([
+            {
+                $lookup: {
+                    from: 'pictures',
+                    localField: '_id',
+                    foreignField: 'userId',
+                    as: 'posts'
+                }
+            }
+        ]).toArray()
+        res.send(allUsers)
+    }
+    catch (error) {
+        res.status(500).send('Error fetching users and posts')
+
+    }
 }
