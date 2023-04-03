@@ -1,6 +1,6 @@
 // Create a user model to interact with MongoDB users collection
 
-import { model, Model, Schema, Document } from "mongoose"
+import mongoose, { model, Model, Schema, Document } from "mongoose"
 import * as bcrypt from "bcrypt"
 
 interface IUser {
@@ -41,21 +41,29 @@ const UserSchema: Schema = new Schema(
         bio: {
             type: String,
             default: ''
+        },
+        pictures: [{
+            type: mongoose.Types.ObjectId,
+            ref: 'Picture'
+        }],
+        isDeleted: {
+            type: Boolean,
+            default: false
         }
     })
 
-    UserSchema.index({
-        username: "text",
-        firstName: "text",
-        lastName:"text"
-    })
+UserSchema.index({
+    username: "text",
+    firstName: "text",
+    lastName: "text"
+})
 /**
  * @method User method for encrypting password before saving the user
  */
-UserSchema.pre("save",  function (next): void {
+UserSchema.pre("save", function (next): void {
     const user = this
-    bcrypt.hash(user.password, Number(process.env.SALT), function (err,hash) {
-        if (err) return next (err)
+    bcrypt.hash(user.password, Number(process.env.SALT), function (err, hash) {
+        if (err) return next(err)
         user.password = hash
         next()
     })
@@ -65,7 +73,7 @@ UserSchema.pre("save",  function (next): void {
  */
 
 UserSchema.method('checkPassword', function (password: string): boolean {
-    if (bcrypt.compareSync(password,this.password)) return true
+    if (bcrypt.compareSync(password, this.password)) return true
     return false
 })
 
