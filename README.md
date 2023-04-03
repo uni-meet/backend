@@ -31,6 +31,7 @@ This backend is created with:
 - Delete Pictures
 - Update Caption
 
+- Get all users posts( main page )
 ### API endpoints
 
 All the endpoints follow the structure:
@@ -43,9 +44,12 @@ For the frontend usage, documentation should be added here:
 
 ### Starting the Backend
 
-1. Set up `.env` variables. ( To generate secret token, run this in the console :
+1.  Go to [MongoDB Atlas Cloud](https://www.mongodb.com/cloud/atlas/register) to create a MongoDB database on the cloud. Follow their documentation on how to create a cluster. Remember to add all IP addresses so that your app can be accessible anywhere, and create a user so that the server can successfully connect to the database using the credentials. 
+2. Create `.env` file and set the following env variables: `BACKEND_PORT`, `MONGOATLAS_CLUSTER`, `MONGOATLAS_USERNAME`, `MONGOATLAS_PASSWORD`. Remember to add `.env` to your `.gitignore` file. 
+( To generate secret token, run this in the console :
    `node -e "console.log(require('crypto').randomBytes(256).toString('base64'));"`)
-2. Run `ts-node server.ts`. If you want to run the server in the background, run `nohup ts-node server.ts`.
+3. Run `ts-node server.ts`. If you want to run the server in the background, run `nohup ts-node server.ts`.
+ 
    You can find all endpoints system via `./src/routes/router.ts`
    All controller functions are at path `./src/controllers/...`
    There are two models in project:
@@ -55,9 +59,9 @@ For the frontend usage, documentation should be added here:
 
 Tasks:
 
-- :fire: create an endpoint to get All users info from db (for main page)
 - test endpoints with REST API
 - create documentation for API endpoints for frontend devs
 - host backend,database, API
 
 ## Useful links
+https://github.com/jaeyoungchang5/share-my-sunset Example of blog app
