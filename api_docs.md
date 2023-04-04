@@ -84,7 +84,7 @@ Example:
 GET   http://localhost:8081/user/getInfo/642563d03d296424b95ac5dc  HTTP/1.1
 ```
 
-# Get user`s username `'/user/getUserUserName'`
+# Get users username `'/user/getUserUserName'`
 
 ```
  method: 'POST',
@@ -106,7 +106,7 @@ Content-Type: application/json
 }
 ```
 
-# Update user`s info `'/user/updateUserInfo'`
+# Update users info `'/user/updateUserInfo'`
 
 ```
  method: 'POST',
@@ -128,7 +128,7 @@ Content-Type: application/json
 }
 ```
 
-# Update user`s password `'/user/updateUserPassword'`
+# Update users password `'/user/updateUserPassword'`
 
 ```
  method: 'POST',
