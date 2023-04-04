@@ -70,7 +70,7 @@ Content-Type: application/json
 }
 ```
 
-# Get Info of User '/user/getInfo/:id'
+# Get Info of User `'/user/getInfo/:id'`
 
 ```
  method: 'GET',
