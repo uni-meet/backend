@@ -10,10 +10,13 @@ To run backend, install
 `nohup ts-node server.ts`
 Configure an IP adress on MongoDB website for connecting to database. View the link here https://www.mongodb.com/docs/atlas/security/add-ip-address-to-list/.
 
+
 ### To mention
 
 I am using mainly POST methods -- may be illogical, but functions are handled with POST requests. How can I fix this?
 
+### Link for frontend example for fetching API
+https://github.com/jaeyoungchang5/share-my-sunset 
 ## User endpoints
 
 # Signup User `'/signup'`
