@@ -238,12 +238,12 @@ export function updatePictureCaption(req: Request, res: Response) {
  * @function get all users pictures 
  * Creates an inner join operation between user and pictures collection
  */
-export function getAllPosts(req: Request, res: Response) {
+export async function getAllPosts(req: Request, res: Response) {
     try {
         const users = db.collection('users')
         const pictures = db.collection('pictures')
 
-        const allUsers = await users.aggregate([
+        const allUsers =  await users.aggregate([
             {
                 $lookup: {
                     from: 'pictures',
