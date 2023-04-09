@@ -10,15 +10,14 @@ import * as userCtrl from "../controllers/user_controller"
 import * as pictureCtrl from "../controllers/picture_controller"
 import { upload } from "../config";
 
-
-
-
-
 //test
-router.get('/test', (req: Request, res: Response): void => {
-    debuglog('LOG', 'router - test', 'Router test success')
-    res.json({ 'result': ' router test success' })
-})
+router.get("/test", (req: Request, res: Response) => {
+    res.status(200).json({ message: "Test route is working" });
+  });
+router.get('/test-signup', (req: Request, res: Response) => {
+    res.status(200).json({ message: "Test signup route is working" });
+});
+
 
 // Here the HTTP methods may be changed. When doing that, check that functions of changed HTTP requests
 // have the needed requirements ( the line req.body... should be changed  to req.params... in functions with GET request)
@@ -38,6 +37,9 @@ router.post('/user/getUserUserName', userCtrl.getUserUsername)
 router.post('/user/updateUserInfo', userCtrl.updateUserInfo)
 router.post('/user/updateUserPassword', userCtrl.updateUserPassword)
 router.delete('/user/deleteUser', userCtrl.deleteUser)
+router.get('/user/getUserInfoByUsername/:username', userCtrl.getUserInfoByUsername);
+router.post('/test-signup', userCtrl.testSignup);
+router.post('/test-signup', userCtrl.signup);
 
 
 // pictures API endpoints 
@@ -49,5 +51,12 @@ router.post('/picture/updatePictureCaption', pictureCtrl.updatePictureCaption)
 
 // create a post feed of all users
 router.get('/users-posts', pictureCtrl.getAllPosts)
+
+// Add the catch-all route at the end
+router.all('*', (req: Request, res: Response) => {
+    res.status(404).json({ message: 'Endpoint not found' });
+});
+
+
 
 export { router }

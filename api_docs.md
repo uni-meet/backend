@@ -1,6 +1,6 @@
 # Information for API endpoints
 
-All API endpoints have a path as follows: 'https://localhost:8081/api/ENDPOINTS'
+All API endpoints have a path as follows: 'https://localhost:8080/api/ENDPOINTS'
 
 ## Installation
 
@@ -37,7 +37,7 @@ https://github.com/jaeyoungchang5/share-my-sunset
 Example:
 
 ```
-POST https://localhost:8081/api/signup  HTTP/1.1
+POST https://localhost:8080/api/signup  HTTP/1.1
 Content-Type: application/json
 
 {
@@ -64,7 +64,7 @@ Content-Type: application/json
 Example:
 
 ```
-POST https://localhost:8081/api/login  HTTP/1.1
+POST https://localhost:8080/api/login  HTTP/1.1
 Content-Type: application/json
 
 {
@@ -78,13 +78,13 @@ Content-Type: application/json
 ```
  method: 'GET',
  headers: {'Content-Type': 'application/json'},
- GET   http://localhost:8081/user/getInfo/{userId}
+ GET   http://localhost:8080/user/getInfo/{userId}
 ```
 
 Example:
 
 ```
-GET   http://localhost:8081/user/getInfo/642563d03d296424b95ac5dc  HTTP/1.1
+GET   http://localhost:8080/user/getInfo/642563d03d296424b95ac5dc  HTTP/1.1
 ```
 
 # Get users username `'/user/getUserUserName'`
@@ -101,7 +101,7 @@ GET   http://localhost:8081/user/getInfo/642563d03d296424b95ac5dc  HTTP/1.1
 Example:
 
 ```
-POST https://localhost:8081/api/user/getUserUserMa,e  HTTP/1.1
+POST https://localhost:8080/api/user/getUserUserMa,e  HTTP/1.1
 Content-Type: application/json
 
 {
@@ -123,7 +123,7 @@ Content-Type: application/json
 Example:
 
 ```
-POST https://localhost:8081/api/user/getUserInfo  HTTP/1.1
+POST https://localhost:8080/api/user/getUserInfo  HTTP/1.1
 Content-Type: application/json
 
 {
@@ -145,7 +145,7 @@ Content-Type: application/json
 Example:
 
 ```
-POST https://localhost:8081/api/user/updateUserPassword HTTP/1.1
+POST https://localhost:8080/api/user/updateUserPassword HTTP/1.1
 Content-Type: application/json
 
 {
@@ -167,7 +167,7 @@ Content-Type: application/json
 Example:
 
 ```
-POST https://localhost:8081/api/user/deleteUser HTTP/1.1
+POST https://localhost:8080/api/user/deleteUser HTTP/1.1
 Content-Type: application/json
 
 {
@@ -193,7 +193,7 @@ body:
 Example:
 
 ```
-POST https://localhost:8081/api/picture HTTP/1.1
+POST https://localhost:8080/api/picture HTTP/1.1
 Content-Type: multipart/form-data
 Accept: application/json
 
@@ -218,7 +218,7 @@ body:
 Example:
 
 ```
-POST https://localhost:8081/api/picture/getPictureById HTTP/1.1
+POST https://localhost:8080/api/picture/getPictureById HTTP/1.1
 Content-Type: application/json
 
 {
@@ -240,7 +240,7 @@ body:
 Example:
 
 ```
-POST https://localhost:8081/api/picture/getPictureIdByUserId HTTP/1.1
+POST https://localhost:8080/api/picture/getPictureIdByUserId HTTP/1.1
 Content-Type: application/json
 
 {
@@ -262,7 +262,7 @@ body:
 Example:
 
 ```
-POST https://localhost:8081/api/picture/deletePicture HTTP/1.1
+POST https://localhost:8080/api/picture/deletePicture HTTP/1.1
 Content-Type: application/json
 
 {
@@ -285,7 +285,7 @@ body:
 Example:
 
 ```
-POST https://localhost:8081/api/picture/updatePictureCaption HTTP/1.1
+POST https://localhost:8080/api/picture/updatePictureCaption HTTP/1.1
 Content-Type: application/json
 
 {
@@ -298,6 +298,6 @@ Content-Type: application/json
 
 ```
 method: 'GET',
-GET https://localhost:8081/api/users/users-posts HTTP/1.1
+GET https://localhost:8080/api/users/users-posts HTTP/1.1
 
 ```

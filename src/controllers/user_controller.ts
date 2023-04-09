@@ -13,10 +13,12 @@ import { Request, Response, NextFunction } from "express";
 import { debuglog, createToken } from "../helpers"
 import { User } from "../models";
 import mongoose from "mongoose";
+
 class UserController {
     constructor() {
 
     }
+    
     // testing function
     async getUsers(req: Request, res: Response, next: NextFunction) {
         return res.status(200).json({
@@ -43,6 +45,36 @@ export default new UserController()
  * @param {string} req.body.bio User`s bio
  * doesn`t return a value
  */
+export function testSignup(req: Request, res: Response): void {
+    if (!req.body.firstName || !req.body.lastName || !req.body.username || !req.body.password) {
+        res.status(400).json({ result: "error", message: "Unsatisfied requirements for signup" })
+        return;
+    }
+
+    const body = {
+        firstName: req.body.firstName,
+        lastName: req.body.lastName,
+        username: req.body.username.toLowerCase(),
+        password: req.body.password,
+        bio: req.body.bio
+
+    }
+    const user = new User(body)
+    user.save()
+        .then(newUser => {
+            debuglog('LOG', 'user controller - signup', 'signup new user success')
+            // create a file for token declaration in helpers folder
+            const token = createToken(newUser)
+            res.status(201).json({ result: "success", message: "User signup" })
+        }).catch((error) => {
+            if (error.code == 11000) {
+                return res.status(400).json({ result: 'failed', message: 'User already exists' })
+            }
+            debuglog('LOG', 'user controller - signup', 'signup fail')
+            console.log(error)
+            res.status(500).json({ result: 'failed', message: 'Server error' })
+        })
+}
 export function signup(req: Request, res: Response): void {
     if (!req.body.firstName || !req.body.lastName || !req.body.username || !req.body.password) {
         res.status(400).json({ result: "error", message: "Unsatisfied requirements for signup" })
@@ -139,6 +171,25 @@ export function getUserInfo(req: Request, res: Response) {
             }
         }).catch(error => {
             debuglog('ERROR', 'user controller - get info', error)
+            res.status(400).json(error)
+            return
+        })
+}
+
+export function getUserInfoByUsername(req: Request, res: Response): void {
+    const username = req.params.username;
+
+    User.findOne({ username: username, isDeleted: false }).select('username')
+        .then(userData => {
+            if (userData) {
+                debuglog('LOG', 'user controller - getUserInfoByUsername', 'got user info')
+                res.status(200).json({ result: "success", data: userData })
+            } else {
+                debuglog('ERROR', 'user controller - getUserInfoByUsername', 'user not found')
+                res.status(404).json({ result: "error", message: "User not found" })
+            }
+        }).catch(error => {
+            debuglog('ERROR', 'user controller - getUserInfoByUsername', error)
             res.status(400).json(error)
             return
         })

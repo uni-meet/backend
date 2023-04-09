@@ -1,8 +1,20 @@
 ### Get tasks
-# https://localhost:PORT/api/ENDPOINTS
+#https://localhost:8080/api/ENDPOINTS 
+
+### test-signup a new user
+POST http://localhost:8080/api/test-signup HTTP/1.1
+Content-Type: application/json
+
+{
+    "firstName" : "Maria",
+    "lastName" : "Dave",
+    "username" : "maria-dave",
+    "password" : "12345",
+    "bio" : "Hey everybody! I am John's friend"
+}
 
 ### Signup a new user
-POST http://localhost:8081/api/signup HTTP/1.1
+POST  http://localhost:8080/api/signup HTTP/1.1
 Content-Type: application/json
 
 {
@@ -14,7 +26,7 @@ Content-Type: application/json
 }
 
 ### Login a new user
-POST http://localhost:8081/api/login  HTTP/1.1
+POST http://localhost:8080/api/login  HTTP/1.1
 Content-Type: application/json
 
 { 
@@ -23,15 +35,15 @@ Content-Type: application/json
 }
 
 ### Get Info of  user
-GET   http://localhost:8081/user/getInfo/642563d03d296424b95ac5dc  HTTP/1.1
+GET   http://localhost:8080/user/getInfo/642563d03d296424b95ac5dc  HTTP/1.1
 
 
 
 ### Get username of user
-GET   http://localhost:8081/users/getUserUserName/642563d03d296424b95ac5dc HTTP/1.1
+GET   http://localhost:8080/users/getUserUserName/642563d03d296424b95ac5dc HTTP/1.1
 
 ### 
-POST http://localhost:8081/user/getUserUsername  HTTP/1.1
+POST http://localhost:8080/user/getUserUsername  HTTP/1.1
 Content-Type: application/json
 
 { 
@@ -39,7 +51,7 @@ Content-Type: application/json
 
 }
 ### Post a picture
-POST http://localhost:8081/api/picture HTTP/1.1
+POST http://localhost:8080/api/picture HTTP/1.1
 Content-Type: application/json
 
 {
