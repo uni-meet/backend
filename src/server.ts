@@ -12,15 +12,9 @@ import { router } from './routes';
 
 const app: Application = express();
 
-dotenv.config({ path: './../.env.local' })
+dotenv.config({ path: './../.env' })
 
 const PORT = process.env.PORT || 8080;
-
-
-// Remove this instance of app.listen()
-// app.listen(PORT, () => {
-//   console.log(`Server is listening on port ${PORT}`);
-// });
 
 /* startup server */
 connectDB(); //connect to database

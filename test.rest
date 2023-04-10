@@ -6,11 +6,11 @@ POST http://localhost:8080/api/test-signup HTTP/1.1
 Content-Type: application/json
 
 {
-    "firstName" : "Maria",
-    "lastName" : "Dave",
-    "username" : "maria-dave",
-    "password" : "12345",
-    "bio" : "Hey everybody! I am John's friend"
+    "firstName" : "newUser",
+    "lastName" : "newUser",
+    "username" : "newUser-newUser",
+    "password" : "newUser",
+    "bio" : "Hey everybody! I am newUser"
 }
 
 ### Signup a new user

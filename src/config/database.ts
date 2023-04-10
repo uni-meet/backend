@@ -20,7 +20,7 @@ const options: any = '?retryWrites=true&w=majority';
 // const databaseUrl: string = `mongodb+srv://${username}:${password}@${cluster}${options}`;
 // const databaseUrl: string = process.env.MONGODB_URI || ""
 
-const databaseUrl: string = 'mongodb+srv://new-user:cBzED0vJcnaz27Zj@cluster1.zgog7ga.mongodb.net/?retryWrites=true&w=majority'
+const databaseUrl: string = process.env.MONGODB_URI || `mongodb+srv://${username}:${password}@${cluster}${options}`;
 console.log(`DB uri: ${databaseUrl}`)
 let db: Connection;
 // const client = new MongoClient(databaseUrl, );

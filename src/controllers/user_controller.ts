@@ -75,10 +75,10 @@ export function testSignup(req: Request, res: Response): void {
             res.status(500).json({ result: 'failed', message: 'Server error' })
         })
 }
-export function signup(req: Request, res: Response): void {
-    if (!req.body.firstName || !req.body.lastName || !req.body.username || !req.body.password) {
-        res.status(400).json({ result: "error", message: "Unsatisfied requirements for signup" })
-        return;
+export function signup(req: Request, res: Response) {
+    if (!req.body.username || !req.body.firstName || !req.body.lastName || !req.body.password) {
+      res.status(400).json({ result: "error", message: "Unsatisfied requirements for signup" });
+      return;
     }
 
     const body = {
