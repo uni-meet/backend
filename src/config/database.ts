@@ -7,7 +7,7 @@ import { debuglog } from '../helpers/debuglog';
 import dotenv from "dotenv"
 
 
-dotenv.config({ path: './.env.local' })
+dotenv.config({ path: './env.local' })
 
 
 // import env variables
@@ -16,14 +16,10 @@ const password: any = process.env.MONGOATLAS_PASSWORD
 const cluster: any = process.env.MONGOATLAS_CLUSTER
 const options: any = '?retryWrites=true&w=majority';
 
-// set up full databaseUrl path
-// const databaseUrl: string = `mongodb+srv://${username}:${password}@${cluster}${options}`;
-// const databaseUrl: string = process.env.MONGODB_URI || ""
 
 const databaseUrl: string = 'mongodb+srv://new-user:cBzED0vJcnaz27Zj@cluster1.zgog7ga.mongodb.net/?retryWrites=true&w=majority'
-console.log(`DB uri: ${databaseUrl}`)
 let db: Connection;
-// const client = new MongoClient(databaseUrl, );
+
 
 function connectDB(): void {
     connect(databaseUrl)

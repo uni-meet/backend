@@ -34,17 +34,17 @@ router.get('/test', (req: Request, res: Response): void => {
 router.post('/signup', userCtrl.signup)
 router.post('/login', userCtrl.login)
 router.get('/user/getInfo/:id', userCtrl.getUserInfo)
-router.post('/user/getUserUserName', userCtrl.getUserUsername)
+router.get('/user/getUserUserName/:id', userCtrl.getUserUsername)
 router.post('/user/updateUserInfo', userCtrl.updateUserInfo)
 router.post('/user/updateUserPassword', userCtrl.updateUserPassword)
-router.delete('/user/deleteUser', userCtrl.deleteUser)
+router.delete('/user/deleteUser/:id', userCtrl.deleteUser)
 
 
 // pictures API endpoints 
 router.post('/picture', upload.single('pictureImage'), pictureCtrl.sharePicture)
-router.post('/picture/getPictureById', pictureCtrl.getPictureById)
-router.post('/picture/getPictureIdByUserId', pictureCtrl.getPictureIdByUserId)
-router.post('/picture/deletePicture', pictureCtrl.deletePicture)
+router.get('/picture/getPictureById/:pictureId', pictureCtrl.getPictureById)
+router.get('/picture/getPictureIdByUserId/:userId', pictureCtrl.getPictureIdByUserId)
+router.delete('/picture/deletePicture/:pictureId', pictureCtrl.deletePicture)
 router.post('/picture/updatePictureCaption', pictureCtrl.updatePictureCaption)
 
 // create a post feed of all users

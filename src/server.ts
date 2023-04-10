@@ -4,7 +4,7 @@ import express, { Express, Application, Request, Response } from 'express';
 
 import dotenv from 'dotenv'
 import body_parser from 'body-parser'
-
+dotenv.config({ path: './env.local' })
 import { connectDB } from './config';
 import { debuglog } from './helpers/debuglog';
 import { router } from './routes';
@@ -12,12 +12,6 @@ const app: Application = express();
 
 
 
-dotenv.config({ path: './../.env.local' })
-
-
-
-
-// const io = require("socket.io")(http)
 
 const PORT: any = process.env.LOCALHOST || 8081;
 /* startup server */

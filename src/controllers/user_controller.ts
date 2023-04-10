@@ -117,7 +117,7 @@ export function login(req: Request, res: Response): void {
 
 /**
  * @function get user info by checking user`s id
- * @param {ObjectId} req.body.userId User`s id
+ * @param {ObjectId} req.params.userId User`s id
  */
 
 export function getUserInfo(req: Request, res: Response) {
@@ -139,7 +139,7 @@ export function getUserInfo(req: Request, res: Response) {
             }
         }).catch(error => {
             debuglog('ERROR', 'user controller - get info', error)
-            res.status(400).json(error)
+            res.status(500).json(error)
             return
         })
 }
@@ -160,17 +160,17 @@ export function getUserInfo(req: Request, res: Response) {
 
 /**
  * @function get username for user with user`s id
- * @param {ObjectId} req.body.userId User`s id
+ * @param {ObjectId} req.params.userId User`s id
  */
 export function getUserUsername(req: Request, res: Response) {
-    if (!req.body.userId) {
+    if (!req.params.userId) {
         res.status(400).json({ result: "error", message: "Unsatisfied requirements for getting user`s username" })
         return;
     }
-    const body = {
+    const params = {
         userId: new mongoose.Types.ObjectId(req.body.userId) // add type ObjectId to userId
     }
-    User.findOne({ _id: body.userId, isDeleted: false }).select('username')
+    User.findOne({ _id: params.userId, isDeleted: false }).select('username')
         .then(userData => {
             if (userData) {
                 debuglog('LOG', 'user controller - getUserUsername', 'got user info')
@@ -295,14 +295,14 @@ export function updateUserPassword(req: Request, res: Response) {
 }
 /**
  * @function Delete user 
- * @param {ObjectId} req.body.userId User`s id
+ * @param {ObjectId} req.params.userId User`s id
  */
 export function deleteUser(req: Request, res: Response) {
-    if (!req.body.userId) {
+    if (!req.params.userId) {
         res.status(400).json({ result: "error", message: "Unsatisfied requirements for deleting user" })
         return;
     }
-    const userId = new mongoose.Types.ObjectId(req.body.userId)
+    const userId = new mongoose.Types.ObjectId(req.params.userId)
     User.updateOne({ _id: userId, isDeleted: false }, { $set: { isDeleted: true } })
 
         .then((dbResponse) => {
@@ -321,11 +321,23 @@ export function deleteUser(req: Request, res: Response) {
             res.status(400).json(error.message)
         })
 }
-/** OPTIONAL
- * @function Get all users from database
- * 
- * @param {ObjectId} req.body.userId User`s id
- */
+// DELETE user by ID
+// export  async function deleteUser(req: Request, res: Response) {
+ 
+//     try {
+//         const deletedUser = await User.findByIdAndDelete(req.params.id);
+
+//         if (!deletedUser) {
+//             return res.status(404).json({ message: 'User not found' });
+//         }
+
+//         return res.status(200).json({ message: 'User deleted successfully' });
+//     } catch (err) {
+//         console.error(err);
+//         return res.status(500).json({ message: 'Internal server error' });
+//     }
+// };
+
 
 
 

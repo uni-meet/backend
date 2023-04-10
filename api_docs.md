@@ -1,22 +1,21 @@
 # Information for API endpoints
 
-All API endpoints have a path as follows: 'https://localhost:8081/api/ENDPOINTS'
-
+All API endpoints have a path as follows: 'http://localhost:8081/api/ENDPOINTS'
+Do not forget to write API in the path!
 ## Installation
 
 To run backend, install
 `npm install`
 `cd src`
 `nohup ts-node server.ts`
-Configure an IP adress on MongoDB website for connecting to database. View the link here https://www.mongodb.com/docs/atlas/security/add-ip-address-to-list/.
+Configure an IP adress on MongoDB website for connecting to database. View the link here http://www.mongodb.com/docs/atlas/security/add-ip-address-to-list/.
 
 
-### To mention
 
-I am using mainly POST methods -- may be illogical, but functions are handled with POST requests. How can I fix this?
+
 
 ### Link for frontend example for fetching API
-https://github.com/jaeyoungchang5/share-my-sunset 
+http://github.com/jaeyoungchang5/share-my-sunset 
 ## User endpoints
 
 # Signup User `'/signup'`
@@ -37,7 +36,7 @@ https://github.com/jaeyoungchang5/share-my-sunset
 Example:
 
 ```
-POST https://localhost:8081/api/signup  HTTP/1.1
+POST http://localhost:8081/api/signup  HTTP/1.1
 Content-Type: application/json
 
 {
@@ -64,7 +63,7 @@ Content-Type: application/json
 Example:
 
 ```
-POST https://localhost:8081/api/login  HTTP/1.1
+POST http://localhost:8081/api/login  HTTP/1.1
 Content-Type: application/json
 
 {
@@ -77,36 +76,26 @@ Content-Type: application/json
 
 ```
  method: 'GET',
- headers: {'Content-Type': 'application/json'},
- GET   http://localhost:8081/user/getInfo/{userId}
+ GET   http://localhost:8081/api/user/getInfo/{userId}
 ```
 
 Example:
 
 ```
-GET   http://localhost:8081/user/getInfo/642563d03d296424b95ac5dc  HTTP/1.1
+GET   http://localhost:8081/api/user/getInfo/642563d03d296424b95ac5dc  HTTP/1.1
 ```
 
-# Get users username `'/user/getUserUserName'`
+# Get users username `'/user/getUserUserName/:id'`
 
 ```
- method: 'POST',
- headers: {'Content-Type': 'application/json'},
-  body:
-  {
-    "userId": "_id"
-  }
+ method: 'GET',
+GET http://localhost:8081/api/user/getUserUserName/:id  HTTP/1.1
 ```
 
 Example:
 
 ```
-POST https://localhost:8081/api/user/getUserUserMa,e  HTTP/1.1
-Content-Type: application/json
-
-{
-    "userId": "642563d03d296424b95ac5dc"
-}
+GET http://localhost:8081/api/user/getUserUserName/642563d03d296424b95ac5dc  HTTP/1.1
 ```
 
 # Update users info `'/user/updateUserInfo'`
@@ -123,7 +112,7 @@ Content-Type: application/json
 Example:
 
 ```
-POST https://localhost:8081/api/user/getUserInfo  HTTP/1.1
+POST http://localhost:8081/api/user/updateUserInfo  HTTP/1.1
 Content-Type: application/json
 
 {
@@ -145,7 +134,7 @@ Content-Type: application/json
 Example:
 
 ```
-POST https://localhost:8081/api/user/updateUserPassword HTTP/1.1
+POST http://localhost:8081/api/user/updateUserPassword HTTP/1.1
 Content-Type: application/json
 
 {
@@ -156,23 +145,15 @@ Content-Type: application/json
 # Delete user `'/user/deleteUser'`
 
 ```
- method: 'POST',
- headers: {'Content-Type': 'application/json'},
-  body:
-  {
-    "userId": "_id"
-  }
+ method: 'DELETE',
+DELETE http://localhost:8081/api/user/deleteUser/:id HTTP/1.1
 ```
 
 Example:
 
 ```
-POST https://localhost:8081/api/user/deleteUser HTTP/1.1
-Content-Type: application/json
+DELETE http://localhost:8081/api/user/deleteUser/642563d03d296424b95ac5dc HTTP/1.1
 
-{
-    "userId": "642563d03d296424b95ac5dc"
-}
 ```
 
 ## Picture endpoints
@@ -193,7 +174,7 @@ body:
 Example:
 
 ```
-POST https://localhost:8081/api/picture HTTP/1.1
+POST http://localhost:8081/api/picture HTTP/1.1
 Content-Type: multipart/form-data
 Accept: application/json
 
@@ -204,70 +185,44 @@ Accept: application/json
 }
 ```
 
-### Get picture by id `'/picture/getPictureById'`
+### Get picture by id `'/picture/getPictureById/:pictureId'`
 
 ```
-method: 'POST',
- headers: {'Content-Type': 'application/json'},
-body:
-  {
-    "userId": "userId"
-  }
+method: 'GET',
+GET http://localhost:8081/api/picture/getPictureById/:pictureId HTTP/1.1
+
 ```
 
 Example:
 
 ```
-POST https://localhost:8081/api/picture/getPictureById HTTP/1.1
-Content-Type: application/json
-
-{
-    "userId": "642563d03d296424b95ac5dc"
-}
+POST http://localhost:8081/api/picture/getPictureById/:pictureId HTTP/1.1
 ```
 
-### Get picture Id by User Id `'/picture/getPictureIdByUserId'`
+### Get picture Id by User Id `'/picture/getPictureIdByUserId/:userId'`
 
 ```
-method: 'POST',
- headers: {'Content-Type': 'application/json'},
-body:
-  {
-    "_id": "pictureId"
-  }
+method: 'GET',
+GET http://localhost:8081/api/picture/getPictureByUserId/:userId HTTP/1.1
 ```
 
 Example:
 
 ```
-POST https://localhost:8081/api/picture/getPictureIdByUserId HTTP/1.1
-Content-Type: application/json
-
-{
-    "userId": "642563d03d296424b95ac5dc"
-}
+GET http://localhost:8081/api/picture/getPictureById/:userId HTTP/1.1
 ```
 
-### Delete picture `'/picture/deletePicture'`
+### Delete picture `'/picture/deletePicture/:pictureId'`
 
 ```
-method: 'POST',
- headers: {'Content-Type': 'application/json'},
-body:
-  {
-    "pictureId": "pictureId"
-  }
+method: 'DELETE',
+DELETE http://localhost:8081/api/picture/deletePicture/:pictureId HTTP/1.1
 ```
 
 Example:
 
 ```
-POST https://localhost:8081/api/picture/deletePicture HTTP/1.1
-Content-Type: application/json
-
-{
-    "pictureId": "642563d03d296424b95ac5dc"
-}
+DELETE http://localhost:8081/api/picture/deletePicture/:pictureId HTTP/1.1
 ```
 
 ### Update picture caption `'/picture/updatePictureCaption'`
@@ -285,7 +240,7 @@ body:
 Example:
 
 ```
-POST https://localhost:8081/api/picture/updatePictureCaption HTTP/1.1
+POST http://localhost:8081/api/picture/updatePictureCaption HTTP/1.1
 Content-Type: application/json
 
 {
@@ -298,6 +253,6 @@ Content-Type: application/json
 
 ```
 method: 'GET',
-GET https://localhost:8081/api/users/users-posts HTTP/1.1
+GET http://localhost:8081/api/users/users-posts HTTP/1.1
 
 ```

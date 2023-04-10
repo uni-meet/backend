@@ -59,17 +59,17 @@ export function sharePicture(req: Request, res: Response) {
 }
 /**
  * @function get a picture by it`s id
- * @param  {ObjectId} req.body._id  ID of a post
+ * @param  {ObjectId} req.params._id  ID of a post
  */
 export function getPictureById(req: Request, res: Response) {
-    if (!req.body._id) {
+    if (!req.params._id) {
         res.status(400).json({ result: "error", message: "Unsatisfied requirements for getting picture" })
         return;
     }
-    const body = {
-        _id: new mongoose.Types.ObjectId(req.body._id) // add type ObjectId to userId
+    const params = {
+        _id: new mongoose.Types.ObjectId(req.params._id) // add type ObjectId to userId
     }
-    Picture.findById(body._id)
+    Picture.findById(params._id)
         .then(foundPicture => {
             if (!foundPicture) {
                 debuglog('ERROR', 'picture controller - getPictureByID', 'picture not found');
@@ -127,18 +127,18 @@ export function getPictureById(req: Request, res: Response) {
 }
 /**
  * @functionGet pictures by User`s ID
- * @param {ObjectId} req.body.userId The _id of a user
+ * @param {ObjectId} req.params.userId The _id of a user
  */
 export function getPictureIdByUserId(req: Request, res: Response) {
-    if (!req.body.userId) {
+    if (!req.params.userId) {
         res.status(400).json({ result: 'error', message: 'Unsatisfied requirements for finding pictures of this user' })
         return
     }
-    const body = {
+    const params = {
         // create new user id 
-        userId: new mongoose.Types.ObjectId(req.body.userId)
+        userId: new mongoose.Types.ObjectId(req.params.userId)
     }
-    Picture.findOne({ userId: body.userId, isDeleted: false }).select('_id').sort({ createdAt: 'descending' })
+    Picture.findOne({ userId: params.userId, isDeleted: false }).select('_id').sort({ createdAt: 'descending' })
         .then((pictureIds) => {
             if (!pictureIds) {
                 debuglog('ERROR', 'picture controller - getUserPics', 'user has no posts');
@@ -156,18 +156,18 @@ export function getPictureIdByUserId(req: Request, res: Response) {
 }
 /**
  * @function delete picture
- * @param {ObjectId} req.body.pictureId The ID of a picture
+ * @param {ObjectId} req.params.pictureId The ID of a picture
  */
 export function deletePicture(req: Request, res: Response) {
-    if (!req.body.pictureId) {
+    if (!req.params.pictureId) {
         res.status(404).json({ result: 'error', message: 'Unsatisfied requirements for deleting pictures' })
         return
     }
-    const body = {
+    const params = {
         // create new user id 
-        pictureId: new mongoose.Types.ObjectId(req.body.pictureId)
+        pictureId: new mongoose.Types.ObjectId(req.params.pictureId)
     }
-    Picture.findOneAndDelete({ _id: body.pictureId })
+    Picture.findOneAndDelete({ _id: params.pictureId })
         .then(picture => {
             if (!picture) {
                 debuglog('ERROR', 'picture controller - deletePic', 'couldn`t find post');
@@ -238,7 +238,7 @@ export function updatePictureCaption(req: Request, res: Response) {
  * @function get all users pictures 
  * Creates an inner join operation between user and pictures collection
  */
-export  async function getAllPosts(req: Request, res: Response) {
+export async function getAllPosts(req: Request, res: Response) {
     try {
         const users = db.collection('users')
         const pictures = db.collection('pictures')
