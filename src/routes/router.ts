@@ -8,6 +8,7 @@ const router: Router = express.Router() // activate router
 // DEPENDENCIES
 import * as userCtrl from "../controllers/user_controller"
 import * as pictureCtrl from "../controllers/picture_controller"
+import * as searchCtrl from '../controllers/search_controller'
 import { upload } from "../config";
 
 
@@ -33,11 +34,11 @@ router.get('/test', (req: Request, res: Response): void => {
 // users API endpoints
 router.post('/signup', userCtrl.signup)
 router.post('/login', userCtrl.login)
-router.get('/user/getInfo/:id', userCtrl.getUserInfo)
-router.get('/user/getUserUserName/:id', userCtrl.getUserUsername)
+router.get('/user/getInfo/:userId', userCtrl.getUserInfo) // change id to userId
+router.get('/user/getUserUserName/:userId', userCtrl.getUserUsername)
 router.post('/user/updateUserInfo', userCtrl.updateUserInfo)
 router.post('/user/updateUserPassword', userCtrl.updateUserPassword)
-router.delete('/user/deleteUser/:id', userCtrl.deleteUser)
+router.delete('/user/deleteUser/:userId', userCtrl.deleteUser)
 
 
 // pictures API endpoints 
@@ -49,5 +50,8 @@ router.post('/picture/updatePictureCaption', pictureCtrl.updatePictureCaption)
 
 // create a post feed of all users
 router.get('/users-posts', pictureCtrl.getAllPosts)
+
+// search
+router.post('/search', searchCtrl.searchUsers);
 
 export { router }

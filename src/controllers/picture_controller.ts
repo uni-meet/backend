@@ -62,12 +62,12 @@ export function sharePicture(req: Request, res: Response) {
  * @param  {ObjectId} req.params._id  ID of a post
  */
 export function getPictureById(req: Request, res: Response) {
-    if (!req.params._id) {
+    if (!req.params._id) { // response should be according API endpoint, and change what is sent to db
         res.status(400).json({ result: "error", message: "Unsatisfied requirements for getting picture" })
         return;
     }
     const params = {
-        _id: new mongoose.Types.ObjectId(req.params._id) // add type ObjectId to userId
+        _id: new mongoose.Types.ObjectId(req.params._id) // add type ObjectId to userId , req.params according to API
     }
     Picture.findById(params._id)
         .then(foundPicture => {

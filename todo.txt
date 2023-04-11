@@ -9,10 +9,15 @@ https://github.com/jaeyoungchang5/share-my-sunset -- sample
  
  
  11.04 FRONTEND
- - server.middleware on frontend ?
- - picture.middleware
- - search.middleware
- - interfaces for picture and user
+ - server.middleware on frontend ? backend URL on render com with /api
+ - picture.middleware 
+ - search.middleware done
+ - interfaces for picture and user done
  - test API endpoints
  - host backend
- - jwt decode for client side
+ - jwt decode for client side 
+ - write a peer review  
+ 
+ 
+ - docs render + server.ts change host/port
+ - chane all get requests to an id with corresponding functions and enclose them  as a variable

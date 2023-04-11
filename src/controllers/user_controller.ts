@@ -62,7 +62,7 @@ export function signup(req: Request, res: Response): void {
         .then(newUser => {
             debuglog('LOG', 'user controller - signup', 'signup new user success')
             // create a file for token declaration in helpers folder
-            const token = createToken(newUser)
+            // const token = createToken(newUser)
             res.status(201).json({ result: "success", message: "User signup" })
         }).catch((error) => {
             if (error.code == 11000) {
@@ -89,12 +89,12 @@ export function login(req: Request, res: Response): void {
         username: req.body.username.toLowerCase(),
         password: req.body.password,
     }
-    debuglog('LOG', 'user controller - login', 'login new user success')
+   
     User.findOne({ username: body.username, isDeleted: false })
         .then((foundUser) => {
             if (!foundUser) {
                 debuglog('ERROR', 'user controller - login', 'user not found')
-                res.status(404).json({ result: "error", message: "User not found" })
+                res.status(402).json({ result: "error", message: "User not found" })
                 return
             }
             // check given password against password in db 
@@ -102,7 +102,7 @@ export function login(req: Request, res: Response): void {
                 debuglog('LOG', 'user controller - login', 'found user, correct password')
                 const token = createToken(foundUser)
                 res.header('auth-token', token)
-                res.status(201).json({ result: "success", message: "Login successful", token: token })
+                res.status(201).json({ result: "success", message: "Login successful", token: token, userId: foundUser._id })
             } else {
                 debuglog('ERROR', 'user controller - login', 'found user, incorrect password, login unauthorized')
                 res.status(401).json({ result: "error", message: "Incorrect password" })
@@ -121,6 +121,7 @@ export function login(req: Request, res: Response): void {
  */
 
 export function getUserInfo(req: Request, res: Response) {
+    console.log(req.params)
     if (!req.params.userId) {
         res.status(400).json({ result: "error", message: "Unsatisfied requirements for getting user`s info" })
         return;
@@ -168,7 +169,7 @@ export function getUserUsername(req: Request, res: Response) {
         return;
     }
     const params = {
-        userId: new mongoose.Types.ObjectId(req.body.userId) // add type ObjectId to userId
+        userId: new mongoose.Types.ObjectId(req.params.userId) // add type ObjectId to userId
     }
     User.findOne({ _id: params.userId, isDeleted: false }).select('username')
         .then(userData => {
@@ -216,7 +217,7 @@ export function updateUserInfo(req: Request, res: Response) {
             continue
         }
         // convert the updated data from request to body to send it to db
-        body[key] = body.req[key]
+        body[key] = req.body[key]
         // if key length is 0, return error
     }
 
