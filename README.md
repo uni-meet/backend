@@ -36,9 +36,8 @@ This backend is created with:
 
 All the endpoints follow the structure:
 https://localhost:PORT/api/ENDPOINTS
-For the frontend usage, documentation should be added here:
-
-- Space for link to Readme.md API documentation
+View readme for API usage:
+- https://github.com/uni-meet/backend/blob/main/api_docs.md
 
 ## For Backend Devs
 
