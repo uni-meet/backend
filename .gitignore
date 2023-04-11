@@ -3,7 +3,7 @@ node_modules
 dist
 build
 # Security
-.env.local
+.env
 # VSCode
 .vscode/*
 !.vscode/settings.json
