@@ -6,3 +6,13 @@ create  functions for getting user info, updating user info, getting user`s ID
 
 https://cloud.mongodb.com/v2/641c7405b77671149b020fcd#/dataAPI -- database
 https://github.com/jaeyoungchang5/share-my-sunset -- sample
+ 
+ 
+ 11.04 FRONTEND
+ - server.middleware on frontend ?
+ - picture.middleware
+ - search.middleware
+ - interfaces for picture and user
+ - test API endpoints
+ - host backend
+ - jwt decode for client side
