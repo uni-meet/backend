@@ -8,7 +8,10 @@ interface IUser {
     lastName: string,
     username: string,
     password: string,
-    bio: string
+    bio: string,
+    privacyMode: number,
+    pictures: mongoose.Types.ObjectId[],
+    isDeleted: boolean
 }
 
 export interface IUserModel extends IUser, Document {
@@ -41,6 +44,14 @@ const UserSchema: Schema = new Schema(
         bio: {
             type: String,
             default: ''
+        },
+        privacyMode: {
+            type: Number,
+            default: 0,
+            enum: [
+                0, // private
+                1 // public
+            ]
         },
         pictures: [{
             type: mongoose.Types.ObjectId,
