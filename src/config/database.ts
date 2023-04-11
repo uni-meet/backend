@@ -1,4 +1,4 @@
-/* This is the configuration file for the MongoDB  database. 
+/* This is the configuration file for the MongoDB  database.
 The cluster connects to the server via the Mongoose package. */
 
 // import dependencies

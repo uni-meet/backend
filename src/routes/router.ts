@@ -15,7 +15,7 @@ import { upload } from "../config";
 
 
 
-//test
+// test
 router.get('/test', (req: Request, res: Response): void => {
     debuglog('LOG', 'router - test', 'Router test success')
     res.json({ 'result': ' router test success' })
@@ -25,9 +25,9 @@ router.get('/test', (req: Request, res: Response): void => {
 // have the needed requirements ( the line req.body... should be changed  to req.params... in functions with GET request)
 // Also, follow the right path for the API.
 /**
- * When it is GET method 
- * For ex: router.get('/user/nameOfFunction/:id', next function) 
- * When it is POST method, no values are added to URL 
+ * When it is GET method
+ * For ex: router.get('/user/nameOfFunction/:id', next function)
+ * When it is POST method, no values are added to URL
  * For ex: router.post('/signup', userCtrl.signup)
  */
 
@@ -41,7 +41,7 @@ router.post('/user/updateUserPassword', userCtrl.updateUserPassword)
 router.delete('/user/deleteUser/:userId', userCtrl.deleteUser)
 
 
-// pictures API endpoints 
+// pictures API endpoints
 router.post('/picture', upload.single('pictureImage'), pictureCtrl.sharePicture)
 router.get('/picture/getPictureById/:pictureId', pictureCtrl.getPictureById)
 router.get('/picture/getPictureIdByUserId/:userId', pictureCtrl.getPictureIdByUserId)

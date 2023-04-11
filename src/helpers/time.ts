@@ -1,6 +1,6 @@
 /**
  * @fileoverview time.ts
- * This file contains a function to help with time calculations. 
+ * This file contains a function to help with time calculations.
  */
 
 /**
@@ -8,13 +8,13 @@
  * @param {Date} date UTC time
  */
 function calculateTimeElapsed(date: Date) {
-    let millisecondsElapsed = new Date().getTime() - new Date(date).getTime();
-    let seconds = Math.floor(millisecondsElapsed / 1000);
-    let minutes = Math.floor(millisecondsElapsed / (1000 * 60));
-    let hours = Math.floor(millisecondsElapsed / (1000 * 60 * 60));
-    let days = Math.floor(millisecondsElapsed / (1000 * 60 * 60 * 24));
-    let months = Math.floor(millisecondsElapsed / (1000 * 60 * 60 * 24 * 30));
-    let years = Math.floor(millisecondsElapsed / (1000 * 60 * 60 * 24 * 365));
+    const millisecondsElapsed = new Date().getTime() - new Date(date).getTime();
+    const seconds = Math.floor(millisecondsElapsed / 1000);
+    const minutes = Math.floor(millisecondsElapsed / (1000 * 60));
+    const hours = Math.floor(millisecondsElapsed / (1000 * 60 * 60));
+    const days = Math.floor(millisecondsElapsed / (1000 * 60 * 60 * 24));
+    const months = Math.floor(millisecondsElapsed / (1000 * 60 * 60 * 24 * 30));
+    const years = Math.floor(millisecondsElapsed / (1000 * 60 * 60 * 24 * 365));
     if (seconds < 60) return `Seconds ago`;
     else if (minutes < 60) return (minutes == 1) ? `One minute ago` : `${minutes} minutes ago`;
     else if (hours < 24) return (hours == 1) ? `One hour ago` : `${hours} hours ago`;

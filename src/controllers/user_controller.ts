@@ -89,7 +89,7 @@ export function login(req: Request, res: Response): void {
         username: req.body.username.toLowerCase(),
         password: req.body.password,
     }
-   
+
     User.findOne({ username: body.username, isDeleted: false })
         .then((foundUser) => {
             if (!foundUser) {
@@ -97,12 +97,12 @@ export function login(req: Request, res: Response): void {
                 res.status(402).json({ result: "error", message: "User not found" })
                 return
             }
-            // check given password against password in db 
+            // check given password against password in db
             if (foundUser.checkPassword(body.password)) {
                 debuglog('LOG', 'user controller - login', 'found user, correct password')
                 const token = createToken(foundUser)
                 res.header('auth-token', token)
-                res.status(201).json({ result: "success", message: "Login successful", token: token, userId: foundUser._id })
+                res.status(201).json({ result: "success", message: "Login successful", token, userId: foundUser._id })
             } else {
                 debuglog('ERROR', 'user controller - login', 'found user, incorrect password, login unauthorized')
                 res.status(401).json({ result: "error", message: "Incorrect password" })
@@ -202,7 +202,7 @@ export function updateUserInfo(req: Request, res: Response) {
     }
     const userId = new mongoose.Types.ObjectId(req.body.userId) // add type ObjectId to userId
 
-    let body: { [key: string]: any } = {};
+    const body: { [key: string]: any } = {};
     let key: string
     for (key in req.body) {
         // create an array of data which should not be updated
@@ -272,7 +272,7 @@ export function updateUserPassword(req: Request, res: Response) {
                 return
             }
             debuglog('LOG', 'user controller - updateUserPassword', 'attempting to update user password')
-            // create a function with checks with given body old password and replaces it with new, saves it 
+            // create a function with checks with given body old password and replaces it with new, saves it
             if (foundUser.checkPassword(body.oldPassword)) {
                 foundUser.password = body.newPassword
                 foundUser.save()
@@ -280,7 +280,7 @@ export function updateUserPassword(req: Request, res: Response) {
                     .then((newUser) => {
                         debuglog('LOG', 'user controller - updateUserPassword', 'Updated password successfully')
                         const token = createToken(newUser)
-                        res.status(201).json({ result: "success", message: "Updated password", token: token })
+                        res.status(201).json({ result: "success", message: "Updated password", token })
                     })
             } else {
                 debuglog('ERROR', 'user controller - updateUserPassword', ' found user, Incorrect password')
@@ -295,7 +295,7 @@ export function updateUserPassword(req: Request, res: Response) {
 
 }
 /**
- * @function Delete user 
+ * @function Delete user
  * @param {ObjectId} req.params.userId User`s id
  */
 export function deleteUser(req: Request, res: Response) {
@@ -324,7 +324,7 @@ export function deleteUser(req: Request, res: Response) {
 }
 // DELETE user by ID
 // export  async function deleteUser(req: Request, res: Response) {
- 
+
 //     try {
 //         const deletedUser = await User.findByIdAndDelete(req.params.id);
 
@@ -343,8 +343,8 @@ export function deleteUser(req: Request, res: Response) {
 
 
 /** OPTIONAL
- * @function Update user password by admin 
- * 
+ * @function Update user password by admin
+ *
  * @param {ObjectId} req.body.userId User`s id
  */
 

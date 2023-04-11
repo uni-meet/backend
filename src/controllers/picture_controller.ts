@@ -101,7 +101,7 @@ export function getPictureById(req: Request, res: Response) {
                                 return
                             }
                             // push chunks in byte size to data
-                            let fileData = []
+                            const fileData = []
                             for (let i = 0; i < chunks.length; i++) {
                                 fileData.push(chunks[i].data.toString('base64'))
                             }
@@ -135,7 +135,7 @@ export function getPictureIdByUserId(req: Request, res: Response) {
         return
     }
     const params = {
-        // create new user id 
+        // create new user id
         userId: new mongoose.Types.ObjectId(req.params.userId)
     }
     Picture.findOne({ userId: params.userId, isDeleted: false }).select('_id').sort({ createdAt: 'descending' })
@@ -164,7 +164,7 @@ export function deletePicture(req: Request, res: Response) {
         return
     }
     const params = {
-        // create new user id 
+        // create new user id
         pictureId: new mongoose.Types.ObjectId(req.params.pictureId)
     }
     Picture.findOneAndDelete({ _id: params.pictureId })
@@ -235,7 +235,7 @@ export function updatePictureCaption(req: Request, res: Response) {
         })
 }
 /**
- * @function get all users pictures 
+ * @function get all users pictures
  * Creates an inner join operation between user and pictures collection
  */
 export async function getAllPosts(req: Request, res: Response) {

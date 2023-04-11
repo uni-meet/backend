@@ -24,7 +24,7 @@ console.log(username)
 
 const url: string = `mongodb+srv://${username}:${password}@${cluster}`;
 const storage = new GridFsStorage({
-    url: url,
+    url,
     file: (req, file) => {
         return {
             bucketName: 'images00',
@@ -33,5 +33,5 @@ const storage = new GridFsStorage({
     }
 })
 export const upload = multer({
-    storage: storage
+    storage
 })

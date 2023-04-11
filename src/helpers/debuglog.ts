@@ -6,7 +6,7 @@
 * @param {string} type Type of message, eithor LOG or DEBUG
 * @param {string} func Name of controller/ function
 * @param {string} message Message
-*/ 
+*/
 function debuglog(type: String, func: String, message: String) {
     console.log(`[${type}] :: ${func} :: ${message} ::` + new Date() )
 }

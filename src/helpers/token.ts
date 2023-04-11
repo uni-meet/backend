@@ -1,6 +1,6 @@
 /**
- * @fileoverview Create a token 
- * 
+ * @fileoverview Create a token
+ *
  */
 import * as jwt from "jsonwebtoken"
 
