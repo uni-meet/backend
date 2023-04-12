@@ -18,7 +18,6 @@ interface Env_variables  {
 const username: string | undefined = process.env.MONGOATLAS_USERNAME
 const password: string | undefined = process.env.MONGOATLAS_PASSWORD
 const cluster: string | undefined = process.env.MONGOATLAS_CLUSTER
-console.log(username)
 
 
 

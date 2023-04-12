@@ -86,7 +86,7 @@ export function getPictureById(req: Request, res: Response) {
 
                     if (!doc) {
                         res.status(404).json({ result: 'error', message: 'File not found.' });
-                        console.log(Error)
+                     //   console.log(Error)
                         return
                     }
                     // if file is found, sort chunks in the ascending order and declare final data object

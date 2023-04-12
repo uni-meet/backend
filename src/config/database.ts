@@ -21,7 +21,6 @@ const options: any = '?retryWrites=true&w=majority';
 let db: Connection;
 
 // const databaseUrl  = process.env.MONGODB_URI;
-// console.log(databaseUrl) 
 function connectDB(): void {
     connect(databaseUrl)
     db = connection
