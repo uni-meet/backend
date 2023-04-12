@@ -4,10 +4,11 @@ import express, { Express, Application, Request, Response } from 'express';
 
 import dotenv from 'dotenv'
 import body_parser from 'body-parser'
-dotenv.config()
+
 import { connectDB } from './config';
 import { debuglog } from './helpers/debuglog';
 import { router } from './routes';
+dotenv.config()
 const app: Application = express();
 
 

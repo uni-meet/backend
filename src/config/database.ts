@@ -17,10 +17,11 @@ const cluster: any = process.env.MONGOATLAS_CLUSTER
 const options: any = '?retryWrites=true&w=majority';
 
 
-const databaseUrl: string = 'mongodb+srv://new-user:cBzED0vJcnaz27Zj@cluster1.zgog7ga.mongodb.net/?retryWrites=true&w=majority'
+ const databaseUrl: string = 'mongodb+srv://new-user:cBzED0vJcnaz27Zj@cluster1.zgog7ga.mongodb.net/?retryWrites=true&w=majority'
 let db: Connection;
 
-
+// const databaseUrl  = process.env.MONGODB_URI;
+// console.log(databaseUrl) 
 function connectDB(): void {
     connect(databaseUrl)
     db = connection

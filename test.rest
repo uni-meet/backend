@@ -100,7 +100,7 @@ Content-Type: application/json
 ### Get Info of  user
 GET   https://bloggini-backend.onrender.com/api/user/getInfo/643682b7614e99d3edeb9340  HTTP/1.1
 
-### Get posts of  user
+### Get posts of  users
 GET   https://bloggini-backend.onrender.com/api/users-posts  HTTP/1.1
 
 
