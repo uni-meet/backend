@@ -4,7 +4,7 @@
 
 
 
-### Signup a new user
+### Signup a new user - exists
 POST http://localhost:8081/api/signup HTTP/1.1
 Content-Type: application/json
 
@@ -15,26 +15,44 @@ Content-Type: application/json
     "password" : "1234dd5",
     "bio" : "Hey everybody!I am John`s friend"
 }
+### Search sth 
+POST http://localhost:8081/api/search HTTP/1.1
+Content-Type: application/json
 
-### Sign up  a new user
+{
+    "firstName" : "Mariad"
+}
+
+### Sign up  a new user - exists
 POST http://localhost:8081/api/signup  HTTP/1.1
 Content-Type: application/json
 
 {
-        "firstName": "Ani",
+        "firstName": "ddd",
         "lastName": "Popins",
         "username": "ani_po",
         "password": "12345",
         "bio": "Hey out there!"
 }
+### Sign up  a new user
+POST http://localhost:8081/api/signup  HTTP/1.1
+Content-Type: application/json
+
+{
+        "firstName": "ddd",
+        "lastName": "Popins",
+        "username": "magui",
+        "password": "1234445",
+        "bio": "Hey out there!"
+}
 
 ### Login a new user with old password
-POST http://localhost:8081/api/login  HTTP/1.1
+POST https://bloggini-backend.onrender.com/api/login  HTTP/1.1
 Content-Type: application/json
 
 { 
-    "username" : "maria-daveyddy",
-    "password" : "1234dd5"
+    "username" : "magui",
+    "password" : "1234445"
 }
 
 ### Update user password 
@@ -80,12 +98,15 @@ Content-Type: application/json
 
 
 ### Get Info of  user
-GET   http://localhost:8081/api/user/getInfo/64359e4ff703d130569b0ebd  HTTP/1.1
+GET   https://bloggini-backend.onrender.com/api/user/getInfo/643682b7614e99d3edeb9340  HTTP/1.1
+
+### Get posts of  user
+GET   https://bloggini-backend.onrender.com/api/users-posts  HTTP/1.1
 
 
 
 ### Get username of user
-GET   http://localhost:8081/api/user/getUserUserName/64359e4ff703d130569b0ebd HTTP/1.1
+GET   http://localhost:8081/api/user/getUserUserName/643682b7614e99d3edeb9340 HTTP/1.1
 
 
 ### Delete user
