@@ -1,14 +1,15 @@
 // This file handles the startup of server
-
+import dotenv from 'dotenv'
+dotenv.config()
 import express, { Express, Application, Request, Response } from 'express';
 
-import dotenv from 'dotenv'
+
 import body_parser from 'body-parser'
 
 import { connectDB } from './config';
 import { debuglog } from './helpers/debuglog';
 import { router } from './routes';
-dotenv.config()
+
 const app: Application = express();
 
 
