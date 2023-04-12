@@ -2,10 +2,10 @@
 The cluster connects to the server via the Mongoose package. */
 
 // import dependencies
-require('dotenv').config();
+require('dotenv').config({ path: '/Users/maria/backend/.env' });
 import { connect, Connection, connection } from "mongoose";
 import { debuglog } from '../helpers/debuglog';
-console.log(process.env.MONGODB_CLUSTER);
+console.log(process.env);
 
 // import env variables
 const username: any = process.env.MONGOATLAS_USERNAME
