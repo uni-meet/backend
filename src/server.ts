@@ -1,7 +1,6 @@
 // This file handles the startup of server
 import dotenv from 'dotenv'
 dotenv.config()
-console.log(`DB_URI: ${process.env.MONGODB_URI}`)
 import express, { Express, Application, Request, Response } from 'express';
 
 
