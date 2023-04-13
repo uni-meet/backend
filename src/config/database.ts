@@ -2,23 +2,23 @@
 The cluster connects to the server via the Mongoose package. */
 
 // import dependencies
-require('dotenv').config({ path: '/Users/maria/backend/.env' });
 import { connect, Connection, connection } from "mongoose";
 import { debuglog } from '../helpers/debuglog';
 
 
 // import env variables
-const username: any = process.env.MONGOATLAS_USERNAME
-const password: any = process.env.MONGOATLAS_PASSWORD
-const cluster: any = process.env.MONGOATLAS_CLUSTER
-const options: any = '?retryWrites=true&w=majority';
+// const username: any = process.env.MONGOATLAS_USERNAME
+// const password: any = process.env.MONGOATLAS_PASSWORD
+// const cluster: any = process.env.MONGOATLAS_CLUSTER
+// const options: any = '?retryWrites=true&w=majority';
 
 
 // const databaseUrl: string = 'mongodb+srv://new-user:cBzED0vJcnaz27Zj@cluster1.zgog7ga.mongodb.net/?retryWrites=true&w=majority'
 let db: Connection;
 // const databaseUrl: string = `mongodb+srv://${username}:${password}@${cluster}${options}`;
 
- const databaseUrl : any = process.env.MONGODB_URI;
+const databaseUrl: any = process.env.MONGODB_URI;
+console.log(databaseUrl)
 function connectDB(): void {
     connect(databaseUrl)
     db = connection

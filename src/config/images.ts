@@ -17,7 +17,7 @@ const cluster: string | undefined = process.env.MONGOATLAS_CLUSTER
 
 
 
-const url: string = `mongodb+srv://${username}:${password}@${cluster}`;
+const url: any = process.env.MONGODB_URI;
 const storage = new MulterGridfsStorage({
     url,
     file: (req: any, file: any) => {
