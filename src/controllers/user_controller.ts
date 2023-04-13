@@ -120,7 +120,6 @@ export function login(req: Request, res: Response): void {
  */
 
 export function getUserInfo(req: Request, res: Response) {
-    console.log(req.params)
     if (!req.params.userId) {
         res.status(400).json({ result: "error", message: "Unsatisfied requirements for getting user`s info" })
         return;

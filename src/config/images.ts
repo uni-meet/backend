@@ -11,9 +11,6 @@ import MulterGridfsStorage from "multer-gridfs-storage";
 
 
 // import env variables
-const username: string | undefined = process.env.MONGOATLAS_USERNAME
-const password: string | undefined = process.env.MONGOATLAS_PASSWORD
-const cluster: string | undefined = process.env.MONGOATLAS_CLUSTER
 
 
 
