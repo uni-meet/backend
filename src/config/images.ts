@@ -5,13 +5,9 @@
 
 // import dependencies
 
-import { GridFsStorage } from "multer-gridfs-storage/lib/gridfs";
+
 import multer from "multer";
-
-interface Env_variables  {
-    name: string,
-
-}
+import MulterGridfsStorage from "multer-gridfs-storage";
 
 
 // import env variables
@@ -22,9 +18,9 @@ const cluster: string | undefined = process.env.MONGOATLAS_CLUSTER
 
 
 const url: string = `mongodb+srv://${username}:${password}@${cluster}`;
-const storage = new GridFsStorage({
+const storage = new MulterGridfsStorage({
     url,
-    file: (req, file) => {
+    file: (req: any, file: any) => {
         return {
             bucketName: 'images00',
             filename: new Date().toISOString() + file.originalname
