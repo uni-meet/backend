@@ -19,8 +19,13 @@ const app: Application = express();
 const PORT: any = process.env.PORT || 8081; // change to port
 /* startup server */
 connectDB() // connect to database
-app.use(cors());
 app.use(body_parser.json())
+app.use(
+    cors({
+        origin: 'https://unigram.onrender.com', 
+        credentials: true,
+    })
+);
 app.use(body_parser.urlencoded({ extended: true }))
 app.use('/api', router)  // all api routes will follow 'https://localhost:PORT/api/ENDPOINTS' format
 app.use(express.static('uploads'))
