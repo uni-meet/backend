@@ -9,6 +9,7 @@ const router: Router = express.Router() // activate router
 import * as userCtrl from "../controllers/user_controller"
 import * as pictureCtrl from "../controllers/picture_controller"
 import * as searchCtrl from '../controllers/search_controller'
+import * as feedback from '../controllers/feedback_controller'
 import { upload } from "../config";
 
 
@@ -39,7 +40,8 @@ router.get('/user/getUserUserName/:userId', userCtrl.getUserUsername)
 router.post('/user/updateUserInfo', userCtrl.updateUserInfo)
 router.post('/user/updateUserPassword', userCtrl.updateUserPassword)
 router.delete('/user/deleteUser/:userId', userCtrl.deleteUser)
-
+// feedback form
+router.get('/user/feedback/:userId', feedback.createFeedback);
 
 // pictures API endpoints
 router.post('/picture', upload.single('pictureImage'), pictureCtrl.sharePicture)
@@ -47,6 +49,7 @@ router.get('/picture/getPictureById/:pictureId', pictureCtrl.getPictureById)
 router.get('/picture/getPictureIdByUserId/:userId', pictureCtrl.getPictureIdByUserId)
 router.delete('/picture/deletePicture/:pictureId', pictureCtrl.deletePicture)
 router.post('/picture/updatePictureCaption', pictureCtrl.updatePictureCaption)
+// add comments
 router.post('/picture/addComment', pictureCtrl.addComment);
 
 // create a post feed of all users

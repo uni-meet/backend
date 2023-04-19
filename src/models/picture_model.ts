@@ -11,6 +11,8 @@ interface IPicture {
     description: string,
     createdAt: Date,
     updatedAt: Date
+    comments: mongoose.Types.ObjectId[],
+    likes: mongoose.Types.ObjectId[]
 }
 
 interface IPictureModel extends IPicture, Document { }

@@ -267,11 +267,11 @@ export async function getAllPosts(req: Request, res: Response) {
 }
 
 // function get Likes on pictures
-export async function likePicture(req, res) {
+export async function likePicture(req: Request, res: Response) {
     const { pictureId } = req.params;
     const { userId } = req.body;
     if (!pictureId || !userId) {
-        res.status(400).json({ result: "error", message: "Unsatisfied requirements for creating comment" })
+        res.status(400).json({ result: "error", message: "Unsatisfied requirements for creating likes" })
         return;
     }
     try {
@@ -294,12 +294,17 @@ export async function likePicture(req, res) {
         return res.status(500).json({ error: 'Internal server error' });
     }
 }
+
 /**Comment function
  * @function
  */
 export async function addComment(req, res) {
     const { pictureId } = req.params;
     const { userId, text } = req.body;
+    if (!pictureId || !userId) {
+        res.status(400).json({ result: "error", message: "Unsatisfied requirements for creating comment" })
+        return;
+    }
 
     try {
         const picture = await Picture.findById(pictureId);

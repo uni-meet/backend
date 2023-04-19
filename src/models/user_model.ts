@@ -11,6 +11,7 @@ interface IUser {
     bio: string,
     privacyMode: number,
     pictures: mongoose.Types.ObjectId[],
+    feedbacks: mongoose.Types.ObjectId[],
     isDeleted: boolean
 }
 
@@ -56,6 +57,10 @@ const UserSchema: Schema = new Schema(
         pictures: [{
             type: mongoose.Types.ObjectId,
             ref: 'Picture'
+        }],
+        feedbacks: [{
+            type: mongoose.Types.ObjectId,
+            ref: 'Feedback'
         }],
         isDeleted: {
             type: Boolean,
