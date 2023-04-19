@@ -62,7 +62,8 @@ export function signup(req: Request, res: Response): void {
         .then(newUser => {
             debuglog('LOG', 'user controller - signup', 'signup new user success')
             // create a file for token declaration in helpers folder
-            // const token = createToken(newUser)
+            const token = createToken(newUser)
+            res.header('auth-token', token);
             res.status(201).json({ result: "success", message: "User signup" })
         }).catch((error) => {
             if (error.code == 11000) {
@@ -131,8 +132,8 @@ export function getUserInfo(req: Request, res: Response) {
         .then(userData => {
             if (userData) {
                 debuglog('LOG', 'user controller - getUserInfo', 'user  found')
-                res.status(200).json({ result: "success", message: "User  found" })
-            } else {
+                res.status(200).json(userData); // change here to display data
+} else {
                 debuglog('ERROR', 'user controller - get info', 'user not found')
                 res.status(404).json({ result: "error", message: "User not found" })
             }
