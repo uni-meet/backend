@@ -86,7 +86,7 @@ export function getPictureById(req: Request, res: Response) {
 
                     if (!doc) {
                         res.status(404).json({ result: 'error', message: 'File not found.' });
-                     //   console.log(Error)
+                        //   console.log(Error)
                         return
                     }
                     // if file is found, sort chunks in the ascending order and declare final data object
@@ -112,7 +112,8 @@ export function getPictureById(req: Request, res: Response) {
                                 description: picture.description,
                                 createdAt: picture.createdAT,
                                 updatedAt: picture.updatedAt,
-                                pictureImage: `data:${doc.contentType};base64,${fileData.join('')}`
+                                pictureImage: `data:${doc.contentType};base64,${fileData.join('')}`,
+                                comments: picture.comments
                             }
                             debuglog('LOG', 'picture controller - getPictureById', 'Picture was found')
                             res.status(200).json({ result: "success", message: "Found post", data: finalData })
@@ -165,7 +166,7 @@ export function deletePicture(req: Request, res: Response) {
         return
     }
     const params = {
-        // create new user id
+        // create new picture id
         pictureId: new mongoose.Types.ObjectId(req.params.pictureId)
     }
     Picture.findOneAndDelete({ _id: params.pictureId })
@@ -261,3 +262,65 @@ export async function getAllPosts(req: Request, res: Response) {
 
     }
 }
+
+// function get Likes on pictures
+export async function likePicture(req, res) {
+    const { pictureId } = req.params;
+    const { userId } = req.body;
+    if (!pictureId || !userId) {
+        res.status(400).json({ result: "error", message: "Unsatisfied requirements for creating comment" })
+        return;
+    }
+    try {
+        const picture = await Picture.findById(pictureId);
+
+        if (!picture) {
+            return res.status(404).json({ error: 'Picture not found' });
+        }
+
+        if (picture.likes.includes(userId)) {
+            return res.status(400).json({ error: 'User has already liked this picture' });
+        }
+
+        picture.likes.push(userId);
+        await picture.save();
+
+        return res.status(200).json({ message: 'Picture liked successfully' });
+    } catch (err) {
+        console.error(err);
+        return res.status(500).json({ error: 'Internal server error' });
+    }
+}
+/**Comment function
+ * @function
+ */
+export async function addComment(req, res) {
+    const { pictureId } = req.params;
+    const { userId, text } = req.body;
+
+    try {
+        const picture = await Picture.findById(pictureId);
+
+        if (!picture) {
+            return res.status(404).json({ error: 'Picture not found' });
+        }
+        if (picture.likes.includes(userId)) {
+            return res.status(400).json({ error: 'User has already liked this picture' });
+        }
+
+        const newComment = {
+            user: userId,
+            text,
+            createdAt: Date.now()
+        };
+
+        picture.comments.push(newComment);
+        await picture.save();
+
+        return res.status(200).json({ message: 'Comment added successfully' });
+    } catch (err) {
+        console.error(err);
+        return res.status(500).json({ error: 'Internal server error' });
+    }
+}
+

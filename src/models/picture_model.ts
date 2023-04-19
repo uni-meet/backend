@@ -28,8 +28,30 @@ const PictureSchema: Schema = new Schema({
     description: {
         type: String,
         required: true
-    }
-
+    },
+    comments: [
+        {
+            user: {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: 'User',
+                required: true
+            },
+            text: {
+                type: String,
+                required: true
+            },
+            createdAt: {
+                type: Date,
+                default: Date.now
+            }
+        }
+    ],
+    likes: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'User'
+        }
+    ]
 }, { timestamps: true })
 
 export const Picture: Model<IPictureModel> = model<IPictureModel>("Picture", PictureSchema)

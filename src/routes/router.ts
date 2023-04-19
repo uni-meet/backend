@@ -47,6 +47,7 @@ router.get('/picture/getPictureById/:pictureId', pictureCtrl.getPictureById)
 router.get('/picture/getPictureIdByUserId/:userId', pictureCtrl.getPictureIdByUserId)
 router.delete('/picture/deletePicture/:pictureId', pictureCtrl.deletePicture)
 router.post('/picture/updatePictureCaption', pictureCtrl.updatePictureCaption)
+router.post('/picture/addComment', pictureCtrl.addComment);
 
 // create a post feed of all users
 router.get('/users-posts', pictureCtrl.getAllPosts)

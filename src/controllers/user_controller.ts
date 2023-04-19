@@ -143,21 +143,6 @@ export function getUserInfo(req: Request, res: Response) {
             return
         })
 }
-
-// // test function to get user info by id
-// let findUsers = async (req: Request, res: Response) => {
-//     try {
-//         const user = await User.findById(req.params.id);
-//         if (!user) {
-//             return res.status(404).json({ error: 'User not found' });
-//         }
-//         res.json(user);
-//     } catch (err) {
-//         res.status(500).json({ error: Error });
-//     }
-// };
-// export { findUsers }
-
 /**
  * @function get username for user with user`s id
  * @param {ObjectId} req.params.userId User`s id

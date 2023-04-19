@@ -94,6 +94,15 @@ Content-Type: application/json
     "username" : "maria-daveyddy",
     "bio" : "new bio2"
 }
+### Add a comment
+POST https://bloggini-backend.onrender.com/api/picture/addComment  HTTP/1.1
+
+Content-Type: application/json
+
+{ 
+    "userId": "64359e4ff703d130569b0ebd",
+   
+}
 
 
 
