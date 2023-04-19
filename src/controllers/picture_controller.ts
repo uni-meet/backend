@@ -39,11 +39,13 @@ export function sharePicture(req: Request, res: Response) {
                 res.status(404).json({ result: 'error', message: 'User not found.' });
                 return;
             }
-            const picture = new Picture(body)
+            const picture = new Picture(body, { comments: [], likes: [] })
             picture.save()
             if (!foundUser.pictures) {
                 // if user has no array of pictures, initialize new array
-                foundUser.pictures = []
+                foundUser.pictures = [],
+                    comments = [],
+                    likes = []
             }
             // if user has an array of pictures, then save the id of picture and push to an array
             foundUser.pictures.push(picture._id)
@@ -113,7 +115,8 @@ export function getPictureById(req: Request, res: Response) {
                                 createdAt: picture.createdAT,
                                 updatedAt: picture.updatedAt,
                                 pictureImage: `data:${doc.contentType};base64,${fileData.join('')}`,
-                                comments: picture.comments
+                                comments: picture.comments,
+                                likes: picture.likes
                             }
                             debuglog('LOG', 'picture controller - getPictureById', 'Picture was found')
                             res.status(200).json({ result: "success", message: "Found post", data: finalData })
@@ -285,7 +288,7 @@ export async function likePicture(req, res) {
         picture.likes.push(userId);
         await picture.save();
 
-        return res.status(200).json({ message: 'Picture liked successfully' });
+        return res.status(200).json({ message: 'Picture liked successfully', picture });
     } catch (err) {
         console.error(err);
         return res.status(500).json({ error: 'Internal server error' });
@@ -317,7 +320,8 @@ export async function addComment(req, res) {
         picture.comments.push(newComment);
         await picture.save();
 
-        return res.status(200).json({ message: 'Comment added successfully' });
+        return res.status(200).json({ message: 'Comment added successfully', picture });
+
     } catch (err) {
         console.error(err);
         return res.status(500).json({ error: 'Internal server error' });
