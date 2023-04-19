@@ -51,6 +51,8 @@ router.delete('/picture/deletePicture/:pictureId', pictureCtrl.deletePicture)
 router.post('/picture/updatePictureCaption', pictureCtrl.updatePictureCaption)
 // add comments
 router.post('/picture/addComment', pictureCtrl.addComment);
+//TODO -  test backend APi routes and picture routes
+//TODO - check forntend on account of right fetching API
 
 // create a post feed of all users
 router.get('/users-posts', pictureCtrl.getAllPosts)
