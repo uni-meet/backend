@@ -13,7 +13,6 @@ import MulterGridfsStorage from "multer-gridfs-storage";
 // import env variables
 
 
-
 const url: any = process.env.MONGODB_URI;
 const storage = new MulterGridfsStorage({
     url,

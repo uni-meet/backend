@@ -73,12 +73,12 @@ export function sharePicture(req: Request, res: Response) {
 //                                 "pictures" : [],
 
 // }
-import fs from 'fs' // import the Node.js file system module
+// import fs from 'fs' // import the Node.js file system module
 
-// read the picture file from disk
-const pictureData = fs.readFileSync('./test.png');
+// // read the picture file from disk
+// const pictureData = fs.readFileSync('./test.png');
 
-// create a new instance of the Picture model
+// // create a new instance of the Picture model
 // const picture = new Picture({
 //     userId: "64411b35fc94e163b94ee794", // replace with the user ID
 //     pictureImage: pictureData, // set the picture data as a Buffer
@@ -91,7 +91,6 @@ const pictureData = fs.readFileSync('./test.png');
 //     likes: []
 // });
 
-// // save the picture to the database
 // picture.save()
 //     .then(savedPicture => {
 //         console.log('Picture saved successfully:', savedPicture);
@@ -105,108 +104,217 @@ const pictureData = fs.readFileSync('./test.png');
 
 /**
  * @function get a picture by it`s id
- * @param  {ObjectId} req.params._id   ID of a post
+ * @param  {ObjectId} req.params.pictureId   ID of a post
  * /// parameters changed to pictureId @param _id should be!
- //REVIEW - So the problem was here to change the pictureId to the _id (database id) because it couldn`t find it in database =>
- all other things didn`t work
+ //REVIEW - The params object is created with _id key 
+ but the findById method is called with _id replaced by pictureId. To fix this issue,
+  you can replace req.params._id with req.params.pictureId in the params object.
  */
-export function getPictureById(req: Request, res: Response) {
-    if (!req.params._id) { // response should be according API endpoint, and change what is sent to db
+//!SECTION OLD
+// export function getPictureById(req: Request, res: Response) {
+//     if (!req.params.pictureId) { // response should be according API endpoint, and change what is sent to db
+//         res.status(400).json({ result: "error", message: "Unsatisfied requirements for getting picture" })
+//         return;
+//     }
+//     //NOTE - changes here   pictureId: new mongoose.Types.ObjectId(req.params.pictureId) // add type ObjectId to userId , req.params according to API
+//     const params = {
+//         _id: new mongoose.Types.ObjectId(req.params.pictureId) // add type ObjectId to userId , req.params according to API
+//     }
+//     Picture.findById(params)
+//         .then(foundPicture => {
+//             if (!foundPicture) {
+//                 debuglog('ERROR', 'picture controller - getPictureByID', 'picture not found');
+//                 res.status(404).json({ result: 'error', message: 'Picture not found.' });
+//                 return;
+//             }
+//             // if found picture, divide it by chunks
+//             const collectionFiles = db.collection('image00.files')
+//             const collectionChunks = db.collection('image00.chunks')
+//             // find a picture by its filename. If document exists, find collectionChunks
+//             collectionFiles.findOne({ filename: foundPicture.pictureImage })
+//                 .then((doc) => {
+
+//                     if (!doc) {
+//                         res.status(404).json({ result: 'error', message: 'File not found.' });
+//                         console.log(Error)
+//                         return
+//                     }
+//                     // if file is found, sort chunks in the ascending order and declare final data object
+//                     collectionChunks.find({ files_id: doc._id })
+//                         .sort({ n: 1 }).toArray(function (err, chunks) {
+//                             if (err) {
+//                                 res.status(400).json("Failed to find picture image in chunks")
+//                                 return
+//                             }
+
+//                             if (!chunks || chunks.length == 0) {
+//                                 res.status(404).json("No file found")
+//                                 return
+//                             }
+//                             // push chunks in byte size to data
+//                             const fileData = []
+//                             for (let i = 0; i < chunks.length; i++) {
+//                                 fileData.push(chunks[i].data.toString('base64'))
+//                             }
+//                             const finalData = {
+//                                 pictureId: foundPicture._id,
+//                                 userId: foundPicture.userId,
+//                                 description: foundPicture.description,
+//                                 createdAt: foundPicture.createdAT,
+//                                 updatedAt: foundPicture.updatedAt,
+//                                 pictureImage: `data:${doc.contentType};base64,${fileData.join('')}`,
+//                                 comments: foundPicture.comments,
+//                                 likes: foundPicture.likes
+//                             }
+//                             debuglog('LOG', 'picture controller - getPicture', 'Picture was found')
+//                             res.status(200).json({ result: "success", message: "Found post", data: finalData })
+
+//                         })
+//                 })
+
+//         }).catch(error => {
+//             debuglog('ERROR', 'picture controller - getPicture', error)
+//             res.status(400).json(error)
+//             return
+//         })
+// }
+//!SECTION NEW
+/** @function get a picture by it`s id
+ * @param  {ObjectId} req.params.pictureId   ID of a post
+*/
+
+export async function getPictureById(req: Request, res: Response) {
+    if (!req.params.pictureId) { // response should be according API endpoint, and change what is sent to db
         res.status(400).json({ result: "error", message: "Unsatisfied requirements for getting picture" })
         return;
     }
-    //NOTE - changes here   pictureId: new mongoose.Types.ObjectId(req.params.pictureId) // add type ObjectId to userId , req.params according to API
+    //NOTE  req.params according to API
     const params = {
-        _id: new mongoose.Types.ObjectId(req.params._id) // add type ObjectId to userId , req.params according to API
+        _id: new mongoose.Types.ObjectId(req.params.pictureId) // add type ObjectId to userId , req.params according to API
     }
-    Picture.findById({ _id: params._id })
-        .then(foundPicture => {
-            if (!foundPicture) {
-                debuglog('ERROR', 'picture controller - getPictureByID', 'picture not found');
-                res.status(404).json({ result: 'error', message: 'Picture not found.' });
-                return;
-            }
-            // if found picture, divide it by chunks
-            const collectionFiles = db.collection('image00.files')
-            const collectionChunks = db.collection('image00.chunks')
-            // find a picture by its filename. If document exists, find collectionChunks
-            collectionFiles.findOne({ filename: picture.pictureImage })
-                .then((doc) => {
+    try {
+        const picture = await Picture.findById(params._id)
+            .populate("likes", "username")
+            .populate({
+                path: "comments",
+                populate: {
+                    path: "user",
+                    select: "username",
+                },
+            });
 
-                    if (!doc) {
-                        res.status(404).json({ result: 'error', message: 'File not found.' });
-                        console.log(Error)
-                        return
-                    }
-                    // if file is found, sort chunks in the ascending order and declare final data object
-                    collectionChunks.find({ files_id: doc._id })
-                        .sort({ n: 1 }).toArray(function (err, chunks) {
-                            if (err) {
-                                res.status(400).json("Failed to find picture image in chunks")
-                                return
-                            }
+        if (!picture) {
+            debuglog('ERROR', 'picture controller - getUserPics', 'user has no posts');
+            throw new Error("Picture not found");
+        }
 
-                            if (!chunks || chunks.length == 0) {
-                                res.status(404).json("No file found")
-                                return
-                            }
-                            // push chunks in byte size to data
-                            const fileData = []
-                            for (let i = 0; i < chunks.length; i++) {
-                                fileData.push(chunks[i].data.toString('base64'))
-                            }
-                            const finalData = {
-                                pictureId: foundPicture._id,
-                                userId: foundPicture.userId,
-                                description: foundPicture.description,
-                                createdAt: foundPicture.createdAT,
-                                updatedAt: foundPicture.updatedAt,
-                                pictureImage: `data:${doc.contentType};base64,${fileData.join('')}`,
-                                comments: foundPicture.comments,
-                                likes: foundPicture.likes
-                            }
-                            debuglog('LOG', 'picture controller - getPicture', 'Picture was found')
-                            res.status(200).json({ result: "success", message: "Found post", data: finalData })
+        if (picture) {
 
-                        })
-                })
+            res.status(200).json({ result: "success", message: "Found post", data: picture })
+        }
 
-        }).catch(error => {
-            debuglog('ERROR', 'picture controller - getPicture', error)
-            res.status(400).json(error)
-            return
-        })
+
+    } catch (error) {
+        debuglog('ERROR', 'picture controller - getUserPics', 'posts are not found')
+        res.status(404).json({ message: error.message });
+    }
+
 }
 /**
- * @functionGet pictures by User`s ID
+ * @function Get pictures by User`s ID
  * @param {ObjectId} req.params.userId The _id of a user
  */
-export function getPictureByUserId(req: Request, res: Response) {
+export async function getPictureByUserId(req: Request, res: Response) {
     if (!req.params.userId) {
         res.status(400).json({ result: 'error', message: 'Unsatisfied requirements for finding pictures of this user' })
         return
     }
     const params = {
         // create new user id
-        userId: new mongoose.Types.ObjectId(req.params.userId)
+        _id: new mongoose.Types.ObjectId(req.params.userId)
     }
-    //FIXME -  userId - ?
-    Picture.find({ userId: params.userId, isDeleted: false }).select('_id').sort({ createdAt: 'descending' })
-        .then((pictureIds) => {
-            if (!pictureIds) {
-                debuglog('ERROR', 'picture controller - getUserPics', 'user has no posts');
-                res.status(200).json({ result: 'success', message: 'User has no posts', data: pictureIds });
-                return;
-            }
-            debuglog('LOG', 'picture controller - getUserpics', 'posts  found')
-            res.status(200).json({ result: "success", message: "Posts found ", data: pictureIds })
-        }).catch(error => {
-            debuglog('ERROR', 'picture controller - getUserPics', 'posts are not found')
-            res.status(400).json(error)
-            return
-        })
+    // const picture = await Picture.findById(params.userId)
+    //     .sort({ createdAt: 'descending' })
+    //     .populate("likes", "username")
+    //     .populate({
+    //         path: "comments",
+    //         populate: {
+    //             path: "user",
+    //             select: "username",
+    //         },
+    //     });
+
+    // if (!picture) {
+    //     debuglog('ERROR', 'picture controller - getUserPics', 'user has no posts');
+    //     res.status(404).json({ message: error.message });
+    //     throw new Error("Picture not found");
+        
+    // }
+
+    // if (picture) {
+
+    //     res.status(200).json({ result: "success", message: "Found post", data: picture })
+    // }
+   // FIXME -  userId - ?
+    Picture.find({ _id: params.userId, isDeleted: false }).select('_id').sort({ createdAt: 'descending' })
+    .then((pictureIds) => {
+        if (!pictureIds) {
+            debuglog('ERROR', 'picture controller - getUserPics', 'user has no posts');
+            res.status(200).json({ result: 'success', message: 'User has no posts', data: pictureIds });
+            return;
+        }
+        debuglog('LOG', 'picture controller - getUserpics', 'posts  found')
+        res.status(200).json({ result: "success", message: "Posts found ", data: pictureIds })
+    }).catch(error => {
+        debuglog('ERROR', 'picture controller - getUserPics', 'posts are not found')
+        res.status(400).json(error)
+        return
+    })
 
 }
+// get user by it`s id 
+//ANCHOR - Test
+export async function create(req: Request, res: Response) {
+    const { userId, description, pictureImage } = req.body;
+
+    try {
+        // create a new picture object
+        const picture = new Picture({
+            userId,
+            description,
+            pictureImage,
+            createdAt: new Date(),
+            updatedAt: new Date(),
+        });
+
+        // save the picture to the database
+        const newPicture = await picture.save();
+
+        // retrieve the pictures associated with the user
+        const pictures = await getPicturesByUserId(userId);
+
+        res.status(201).json({
+            result: "success",
+            message: "Picture created successfully",
+            data: { picture: newPicture, userPictures: pictures },
+        });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+}
+
+async function getPicturesByUserId(userId: string) {
+    try {
+        const pictures = await Picture.find({ userId }).exec();
+        return pictures;
+    } catch (error) {
+        throw new Error("Failed to retrieve pictures by user ID");
+    }
+}
+
+
+
+
 /**
  * @function delete picture
  * @param {ObjectId} req.params.pictureId The ID of a picture

@@ -163,6 +163,13 @@ GET http://localhost:8082/api/picture/getPictureByUserId/64411b35fc94e163b94ee79
 example of pic
 {"_id":{"$oid":"64410ce5cbeb57810235b404"},"userId":"6440f6be5c0a8d1a47a2ebbc","pictureImage":"test.png","description":"wow","comments":[{}]}
 */
+
+
+
+GET http://localhost:8082/api/picture/getPicture/644167e7716ad9b64b58edae HTTP/1.1
+### Get picture by id
+
+
 ### Get posts of  users
 GET   https://bloggini-backend.onrender.com/api/users-posts  HTTP/1.1
 

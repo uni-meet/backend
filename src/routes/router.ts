@@ -45,6 +45,7 @@ router.delete('/user/deleteUser/:userId', userCtrl.deleteUser)
 // pictures API endpoints
 router.post('/picture/sharePicture', upload.single('pictureImage'), pictureCtrl.sharePicture)
 router.get('/picture/getPicture/:pictureId', pictureCtrl.getPictureById)
+
 router.get('/picture/getPictureByUserId/:userId', pictureCtrl.getPictureByUserId)
 router.delete('/picture/deletePicture/:pictureId', pictureCtrl.deletePicture)
 router.post('/picture/updatePictureCaption', pictureCtrl.updatePictureCaption)
