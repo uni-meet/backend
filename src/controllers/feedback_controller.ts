@@ -2,6 +2,7 @@
 import { Request, Response } from "express"
 import { Feedback } from "../models/feedback_model";
 import { User } from "../models";
+import { error } from "console";
 
 export const createFeedback = async (req: Request, res: Response) => {
     try {
@@ -11,7 +12,9 @@ export const createFeedback = async (req: Request, res: Response) => {
 
         const user = await User.findById(userId);
         if (!user) {
+            console.error(error);
             return res.status(404).json({ error: 'User not found' });
+
         }
 
         const feedback = new Feedback({

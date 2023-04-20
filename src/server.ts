@@ -16,13 +16,13 @@ const app: Application = express();
 
 
 
-const PORT: any = process.env.PORT || 8081; // change to port
+const PORT: any = process.env.PORT || 8082; // change to port
 /* startup server */
 connectDB() // connect to database
 app.use(body_parser.json())
 app.use(
     cors({
-        origin: 'https://unigram.onrender.com', 
+        origin: 'https://unigram.onrender.com',
         credentials: true,
     })
 );
@@ -31,7 +31,7 @@ app.use('/api', router)  // all api routes will follow 'https://localhost:PORT/a
 app.use(express.static('uploads'))
 app.listen(PORT, (): void => { // TODO: Study how to pass host
     debuglog('LOG', 'server', `Server is listening on port ${PORT}`)
-    console.log('Server working on http://localhost:8081')
+    console.log('Server working on http://localhost:8082')
 })
 
 

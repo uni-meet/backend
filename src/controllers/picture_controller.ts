@@ -15,7 +15,7 @@ import { db } from "../config"
  * updatePictureCaption
  */
 
-
+//FIXME - posts are not created, but visible in db
 /**
  * @function post(share) a new picture
  * @param {ObjectId} req.body.userId User`s id
@@ -59,6 +59,48 @@ export function sharePicture(req: Request, res: Response) {
         })
 
 }
+//ANCHOR - testing pictures
+// test user
+// {
+//     "_id": "123",
+//         "firstName": "Maria",
+//             "lastName" : "Glushenkova",
+//                 "username" : "maria",
+//                     "password" : "123",
+//                         "bio" : "Test here!",
+//                             "privacyMode" : "1",
+//                                 "pictures" : [],
+//                       
+// }
+// import fs from 'fs' // import the Node.js file system module
+
+// // read the picture file from disk
+// const pictureData = fs.readFileSync('./test.png');
+
+// // create a new instance of the Picture model
+// const picture = new Picture({
+//     userId: "6440f6be5c0a8d1a47a2ebbc", // replace with the user ID
+//     pictureImage: pictureData, // set the picture data as a Buffer
+//     description: 'A beautiful landscape', // replace with the picture description
+//     comments: [{
+//         "user": "643fbc01bab3448131d7111d",
+//         "text": "Nice pic!",
+//         "createdAt": Date.now()
+//     }],
+//     likes: []
+// });
+
+// // save the picture to the database
+// picture.save()
+//     .then(savedPicture => {
+//         console.log('Picture saved successfully:', savedPicture);
+//     })
+//     .catch(error => {
+//         console.error('Error saving picture:', error);
+//     });
+
+
+
 /**
  * @function get a picture by it`s id
  * @param  {ObjectId} req.params._id   ID of a post
@@ -69,6 +111,7 @@ export function getPictureById(req: Request, res: Response) {
         res.status(400).json({ result: "error", message: "Unsatisfied requirements for getting picture" })
         return;
     }
+    //NOTE - changes here   pictureId: new mongoose.Types.ObjectId(req.params.pictureId) // add type ObjectId to userId , req.params according to API
     const params = {
         pictureId: new mongoose.Types.ObjectId(req.params.pictureId) // add type ObjectId to userId , req.params according to API
     }
@@ -83,12 +126,12 @@ export function getPictureById(req: Request, res: Response) {
             const collectionFiles = db.collection('image00.files')
             const collectionChunks = db.collection('image00.chunks')
             // find a picture by its filename. If document exists, find collectionChunks
-            collectionFiles.findOne({ filename: picture.pictureImage })
+            collectionFiles.findOne({ filename: foundPicture.pictureImage })
                 .then((doc) => {
 
                     if (!doc) {
                         res.status(404).json({ result: 'error', message: 'File not found.' });
-                        //   console.log(Error)
+                        console.log(Error)
                         return
                     }
                     // if file is found, sort chunks in the ascending order and declare final data object
@@ -109,23 +152,23 @@ export function getPictureById(req: Request, res: Response) {
                                 fileData.push(chunks[i].data.toString('base64'))
                             }
                             const finalData = {
-                                pictureId: picture._id,
-                                userId: picture.userId,
-                                description: picture.description,
-                                createdAt: picture.createdAT,
-                                updatedAt: picture.updatedAt,
+                                pictureId: foundPicture._id,
+                                userId: foundPicture.userId,
+                                description: foundPicture.description,
+                                createdAt: foundPicture.createdAT,
+                                updatedAt: foundPicture.updatedAt,
                                 pictureImage: `data:${doc.contentType};base64,${fileData.join('')}`,
-                                comments: picture.comments,
-                                likes: picture.likes
+                                comments: foundPicture.comments,
+                                likes: foundPicture.likes
                             }
-                            debuglog('LOG', 'picture controller - getPictureById', 'Picture was found')
+                            debuglog('LOG', 'picture controller - getPicture', 'Picture was found')
                             res.status(200).json({ result: "success", message: "Found post", data: finalData })
 
                         })
                 })
 
         }).catch(error => {
-            debuglog('ERROR', 'picture controller - getPictureById', error)
+            debuglog('ERROR', 'picture controller - getPicture', error)
             res.status(400).json(error)
             return
         })
@@ -134,7 +177,7 @@ export function getPictureById(req: Request, res: Response) {
  * @functionGet pictures by User`s ID
  * @param {ObjectId} req.params.userId The _id of a user
  */
-export function getPictureIdByUserId(req: Request, res: Response) {
+export function getPictureByUserId(req: Request, res: Response) {
     if (!req.params.userId) {
         res.status(400).json({ result: 'error', message: 'Unsatisfied requirements for finding pictures of this user' })
         return
@@ -240,7 +283,7 @@ export function updatePictureCaption(req: Request, res: Response) {
         })
 }
 /**
- * @function get all users pictures
+ * @function get all users pictures with corresponding users fields
  * Creates an inner join operation between user and pictures collection
  */
 export async function getAllPosts(req: Request, res: Response) {
@@ -262,7 +305,46 @@ export async function getAllPosts(req: Request, res: Response) {
     }
     catch (error) {
         res.status(500).send('Error fetching users and posts')
+        console.error(error);
+    }
+}
+/**
+ * @function get all posts
+ * @param req 
+ * @param res 
+ * @returns 
+ */
+/**
+ * @function get all users pictures
+ * Creates an inner join operation between user and pictures collection
+ */
+export async function getAllPics(req: Request, res: Response) {
+    try {
+        const users = db.collection('users')
+        const pictures = db.collection('pictures')
 
+        const allUsers = await users.aggregate([
+            {
+                $lookup: {
+                    from: 'pictures',
+                    localField: '_id',
+                    foreignField: 'userId',
+                    as: 'posts'
+                }
+            },
+            {
+                $project: {
+                    password: 0, // exclude password field from output
+                    'posts.pictureImage': 0, // exclude pictureImage field from post output
+                    'posts.comments.user.password': 0 // exclude password field from comment output
+                }
+            }
+        ]).toArray()
+        res.send(allUsers)
+    }
+    catch (error) {
+        console.error(error);
+        res.status(500).send('Error fetching users and posts')
     }
 }
 

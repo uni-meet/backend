@@ -40,13 +40,12 @@ router.get('/user/getUserUserName/:userId', userCtrl.getUserUsername)
 router.post('/user/updateUserInfo', userCtrl.updateUserInfo)
 router.post('/user/updateUserPassword', userCtrl.updateUserPassword)
 router.delete('/user/deleteUser/:userId', userCtrl.deleteUser)
-// feedback form
-router.get('/user/feedback/:userId', feedback.createFeedback);
+
 
 // pictures API endpoints
-router.post('/picture', upload.single('pictureImage'), pictureCtrl.sharePicture)
-router.get('/picture/getPictureById/:pictureId', pictureCtrl.getPictureById)
-router.get('/picture/getPictureIdByUserId/:userId', pictureCtrl.getPictureIdByUserId)
+router.post('/picture/sharePicture', upload.single('pictureImage'), pictureCtrl.sharePicture)
+router.get('/picture/getPicture/:pictureId', pictureCtrl.getPictureById)
+router.get('/picture/getPictureByUserId/:userId', pictureCtrl.getPictureByUserId)
 router.delete('/picture/deletePicture/:pictureId', pictureCtrl.deletePicture)
 router.post('/picture/updatePictureCaption', pictureCtrl.updatePictureCaption)
 // add comments
@@ -56,8 +55,12 @@ router.post('/picture/addComment', pictureCtrl.addComment);
 
 // create a post feed of all users
 router.get('/users-posts', pictureCtrl.getAllPosts)
+// display all pictures
+router.get('/pics', pictureCtrl.getAllPics)
 
 // search
-router.post('/search', searchCtrl.searchUsers);
+router.post('/search', searchCtrl.searchUser);
+// feedback form
+router.post('/user/feedback', feedback.createFeedback);
 
 export { router }
