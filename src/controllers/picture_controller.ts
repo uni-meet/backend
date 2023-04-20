@@ -32,6 +32,7 @@ export function sharePicture(req: Request, res: Response) {
         description: req.body.description,
         pictureImage: req.file.filename
     }
+    //NOTE - function User.findOne always compares _id with userId !!!
     User.findOne({ _id: body.userId, isDeleted: false })
         .then((foundUser) => {
             if (!foundUser) {
@@ -59,7 +60,7 @@ export function sharePicture(req: Request, res: Response) {
         })
 
 }
-//ANCHOR - testing pictures
+// ANCHOR - testing pictures
 // test user
 // {
 //     "_id": "123",
@@ -70,52 +71,55 @@ export function sharePicture(req: Request, res: Response) {
 //                         "bio" : "Test here!",
 //                             "privacyMode" : "1",
 //                                 "pictures" : [],
-//                       
+
 // }
-// import fs from 'fs' // import the Node.js file system module
+import fs from 'fs' // import the Node.js file system module
 
-// // read the picture file from disk
-// const pictureData = fs.readFileSync('./test.png');
+// read the picture file from disk
+const pictureData = fs.readFileSync('./test.png');
 
-// // create a new instance of the Picture model
-// const picture = new Picture({
-//     userId: "6440f6be5c0a8d1a47a2ebbc", // replace with the user ID
-//     pictureImage: pictureData, // set the picture data as a Buffer
-//     description: 'A beautiful landscape', // replace with the picture description
-//     comments: [{
-//         "user": "643fbc01bab3448131d7111d",
-//         "text": "Nice pic!",
-//         "createdAt": Date.now()
-//     }],
-//     likes: []
-// });
+// create a new instance of the Picture model
+const picture = new Picture({
+    userId: "64411b35fc94e163b94ee794", // replace with the user ID
+    pictureImage: pictureData, // set the picture data as a Buffer
+    description: 'A beautiful landscape', // replace with the picture description
+    comments: [{
+        "user": "643fbc01bab3448131d7111d",
+        "text": "Nice pic!",
+        "createdAt": Date.now()
+    }],
+    likes: []
+});
 
-// // save the picture to the database
-// picture.save()
-//     .then(savedPicture => {
-//         console.log('Picture saved successfully:', savedPicture);
-//     })
-//     .catch(error => {
-//         console.error('Error saving picture:', error);
-//     });
+// save the picture to the database
+picture.save()
+    .then(savedPicture => {
+        console.log('Picture saved successfully:', savedPicture);
+        debuglog('LOG', 'picture controller - sharePicture', 'picture  posted')
+    })
+    .catch(error => {
+        console.error('Error saving picture:', error);
+    });
 
 
 
 /**
  * @function get a picture by it`s id
  * @param  {ObjectId} req.params._id   ID of a post
- * /// parameters changed to pictureId
+ * /// parameters changed to pictureId @param _id should be!
+ //REVIEW - So the problem was here to change the pictureId to the _id (database id) because it couldn`t find it in database =>
+ all other things didn`t work
  */
 export function getPictureById(req: Request, res: Response) {
-    if (!req.params.pictureId) { // response should be according API endpoint, and change what is sent to db
+    if (!req.params._id) { // response should be according API endpoint, and change what is sent to db
         res.status(400).json({ result: "error", message: "Unsatisfied requirements for getting picture" })
         return;
     }
     //NOTE - changes here   pictureId: new mongoose.Types.ObjectId(req.params.pictureId) // add type ObjectId to userId , req.params according to API
     const params = {
-        pictureId: new mongoose.Types.ObjectId(req.params.pictureId) // add type ObjectId to userId , req.params according to API
+        _id: new mongoose.Types.ObjectId(req.params._id) // add type ObjectId to userId , req.params according to API
     }
-    Picture.findOne({ _id: params.pictureId })
+    Picture.findById({ _id: params._id })
         .then(foundPicture => {
             if (!foundPicture) {
                 debuglog('ERROR', 'picture controller - getPictureByID', 'picture not found');
@@ -126,7 +130,7 @@ export function getPictureById(req: Request, res: Response) {
             const collectionFiles = db.collection('image00.files')
             const collectionChunks = db.collection('image00.chunks')
             // find a picture by its filename. If document exists, find collectionChunks
-            collectionFiles.findOne({ filename: foundPicture.pictureImage })
+            collectionFiles.findOne({ filename: picture.pictureImage })
                 .then((doc) => {
 
                     if (!doc) {
@@ -186,7 +190,8 @@ export function getPictureByUserId(req: Request, res: Response) {
         // create new user id
         userId: new mongoose.Types.ObjectId(req.params.userId)
     }
-    Picture.findOne({ userId: params.userId, isDeleted: false }).select('_id').sort({ createdAt: 'descending' })
+    //FIXME -  userId - ?
+    Picture.find({ userId: params.userId, isDeleted: false }).select('_id').sort({ createdAt: 'descending' })
         .then((pictureIds) => {
             if (!pictureIds) {
                 debuglog('ERROR', 'picture controller - getUserPics', 'user has no posts');
@@ -257,7 +262,7 @@ export function deletePicture(req: Request, res: Response) {
  * @param {string} req.body.description The new description
  */
 export function updatePictureCaption(req: Request, res: Response) {
-    if (!req.body.pictureId || !req.body.description) {
+    if (!req.body.pictureId) {
         res.status(400).json({ result: "error", message: "Unsatisfied requirements for updating caption" })
         return;
     }
@@ -350,14 +355,17 @@ export async function getAllPics(req: Request, res: Response) {
 
 // function get Likes on pictures
 export async function likePicture(req: Request, res: Response) {
-    const { pictureId } = req.params;
-    const { userId } = req.body;
-    if (!pictureId || !userId) {
-        res.status(400).json({ result: "error", message: "Unsatisfied requirements for creating likes" })
-        return;
+    if (!req.params.userId || !req.params._id) {
+        res.status(400).json({ result: 'error', message: 'Unsatisfied requirements' })
+        return
     }
     try {
-        const picture = await Picture.findById(pictureId);
+        const params = {
+            // create new user id
+            _id: new mongoose.Types.ObjectId(req.params._id)
+        }
+        const picture = await Picture.findOne({ _id: params._id });
+
 
         if (!picture) {
             return res.status(404).json({ error: 'Picture not found' });
@@ -375,43 +383,43 @@ export async function likePicture(req: Request, res: Response) {
         console.error(err);
         return res.status(500).json({ error: 'Internal server error' });
     }
-}
 
-/**Comment function
- * @function
- */
-export async function addComment(req, res) {
-    const { pictureId } = req.params;
-    const { userId, text } = req.body;
-    if (!pictureId || !userId) {
-        res.status(400).json({ result: "error", message: "Unsatisfied requirements for creating comment" })
-        return;
-    }
 
-    try {
-        const picture = await Picture.findById(pictureId);
-
-        if (!picture) {
-            return res.status(404).json({ error: 'Picture not found' });
-        }
-        if (picture.likes.includes(userId)) {
-            return res.status(400).json({ error: 'User has already liked this picture' });
+    /**Comment function
+     * @function
+     */
+    export async function addComment(req, res) {
+        const { pictureId } = req.params;
+        const { userId, text } = req.body;
+        if (!pictureId || !userId) {
+            res.status(400).json({ result: "error", message: "Unsatisfied requirements for creating comment" })
+            return;
         }
 
-        const newComment = {
-            user: userId,
-            text,
-            createdAt: Date.now()
-        };
+        try {
+            const picture = await Picture.findById(pictureId);
 
-        picture.comments.push(newComment);
-        await picture.save();
+            if (!picture) {
+                return res.status(404).json({ error: 'Picture not found' });
+            }
+            if (picture.likes.includes(userId)) {
+                return res.status(400).json({ error: 'User has already liked this picture' });
+            }
 
-        return res.status(200).json({ message: 'Comment added successfully', picture });
+            const newComment = {
+                user: userId,
+                text,
+                createdAt: Date.now()
+            };
 
-    } catch (err) {
-        console.error(err);
-        return res.status(500).json({ error: 'Internal server error' });
+            picture.comments.push(newComment);
+            await picture.save();
+
+            return res.status(200).json({ message: 'Comment added successfully', picture });
+
+        } catch (err) {
+            console.error(err);
+            return res.status(500).json({ error: 'Internal server error' });
+        }
     }
-}
 
