@@ -118,7 +118,7 @@ DELETE http://localhost:8082/api/user/deleteUser/6434011d9f5f5c3e3b6c4482 HTTP/1
   "result": "success",
   "message": "User delete successful"
 }
-//FIXME - feedback not working
+
 ### Feedback testing
 POST http://localhost:8082/api/user/feedback HTTP/1.1
 Content-Type: application/json

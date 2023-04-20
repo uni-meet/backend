@@ -27,7 +27,7 @@ export const createFeedback = async (req: Request, res: Response) => {
         const feedback = new Feedback({
             user: body.userId,
             name: body.name,
-            message: body.message,
+            message: body.message
         });
 
         const savedFeedback = await feedback.save();

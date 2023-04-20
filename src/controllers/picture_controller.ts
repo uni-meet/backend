@@ -79,27 +79,27 @@ import fs from 'fs' // import the Node.js file system module
 const pictureData = fs.readFileSync('./test.png');
 
 // create a new instance of the Picture model
-const picture = new Picture({
-    userId: "64411b35fc94e163b94ee794", // replace with the user ID
-    pictureImage: pictureData, // set the picture data as a Buffer
-    description: 'A beautiful landscape', // replace with the picture description
-    comments: [{
-        "user": "643fbc01bab3448131d7111d",
-        "text": "Nice pic!",
-        "createdAt": Date.now()
-    }],
-    likes: []
-});
+// const picture = new Picture({
+//     userId: "64411b35fc94e163b94ee794", // replace with the user ID
+//     pictureImage: pictureData, // set the picture data as a Buffer
+//     description: 'A beautiful landscape', // replace with the picture description
+//     comments: [{
+//         "user": "643fbc01bab3448131d7111d",
+//         "text": "Nice pic!",
+//         "createdAt": Date.now()
+//     }],
+//     likes: []
+// });
 
-// save the picture to the database
-picture.save()
-    .then(savedPicture => {
-        console.log('Picture saved successfully:', savedPicture);
-        debuglog('LOG', 'picture controller - sharePicture', 'picture  posted')
-    })
-    .catch(error => {
-        console.error('Error saving picture:', error);
-    });
+// // save the picture to the database
+// picture.save()
+//     .then(savedPicture => {
+//         console.log('Picture saved successfully:', savedPicture);
+//         debuglog('LOG', 'picture controller - sharePicture', 'picture  posted')
+//     })
+//     .catch(error => {
+//         console.error('Error saving picture:', error);
+//     });
 
 
 
@@ -384,42 +384,47 @@ export async function likePicture(req: Request, res: Response) {
         return res.status(500).json({ error: 'Internal server error' });
     }
 
-
-    /**Comment function
-     * @function
-     */
-    export async function addComment(req, res) {
-        const { pictureId } = req.params;
-        const { userId, text } = req.body;
-        if (!pictureId || !userId) {
-            res.status(400).json({ result: "error", message: "Unsatisfied requirements for creating comment" })
-            return;
-        }
-
-        try {
-            const picture = await Picture.findById(pictureId);
-
-            if (!picture) {
-                return res.status(404).json({ error: 'Picture not found' });
-            }
-            if (picture.likes.includes(userId)) {
-                return res.status(400).json({ error: 'User has already liked this picture' });
-            }
-
-            const newComment = {
-                user: userId,
-                text,
-                createdAt: Date.now()
-            };
-
-            picture.comments.push(newComment);
-            await picture.save();
-
-            return res.status(200).json({ message: 'Comment added successfully', picture });
-
-        } catch (err) {
-            console.error(err);
-            return res.status(500).json({ error: 'Internal server error' });
-        }
+}
+/**Comment function
+ * @function
+ */
+//FIXME - POST request, change parameters, add body params and more error handling
+export async function addComment(req: Request, res: Response) {
+    if (!req.body.userId || !req.body.pictureId || !req.body.text) {
+        res.status(400).json({ result: 'error', message: 'Unsatisfied requirements' })
+        return
     }
+
+
+    try {
+        const body = {
+            userId: new mongoose.Types.ObjectId(req.body.userId),
+            pictureId: new mongoose.Types.ObjectId(req.body.pictureId),
+            text: req.body.text
+        }
+        const picture = await Picture.findOne({ _id: body.pictureId });
+        if (!picture) {
+            return res.status(404).json({ error: 'Picture not found' });
+        }
+
+        const comment = new Comment({
+            user: body.userId,
+            text: body.text,
+            createdAt: Date.now()
+        });
+        const savedComment = await picture.save();
+        picture.comments.push(comment._id);
+
+        debuglog('LOG', 'comment controller', 'comment  posted')
+        return res.status(200).json({ comment: savedComment });
+
+    } catch (error: any) {
+        if (error.name === 'ValidationError') {
+            const messages = Object.values(error.errors).map((val: any) => val.message);
+            return res.status(400).json({ error: messages.join(', ') });
+        }
+        console.error(error);
+        return res.status(500).json({ message: 'Error sending feedback.' });
+    }
+}
 

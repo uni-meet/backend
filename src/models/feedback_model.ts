@@ -1,14 +1,14 @@
 import mongoose, { Model, model } from "mongoose";
 
 interface IFeedback {
-    userId: mongoose.Types.ObjectId,
+    user: mongoose.Types.ObjectId,
     name: String,
     message: String,
     createdAt: Date
 }
 
 const FeedbackSchema = new mongoose.Schema({
-    userId: {
+    user: {
         type: mongoose.Types.ObjectId,
         ref: 'User',
         required: true
