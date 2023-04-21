@@ -304,7 +304,7 @@ Content-Type: application/json
 } 
 
 ### Delete picture
-GET  http://localhost:8082/api/picture/deletePicture/644262017c10ba22212eae57 HTTP/1.1
+DELETE   http://localhost:8082/api/picture/deletePicture/644262017c10ba22212eae57 HTTP/1.1
 
 
 
