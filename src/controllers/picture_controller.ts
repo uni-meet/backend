@@ -2,6 +2,8 @@
 import mongoose from "mongoose"
 import { debuglog } from "../helpers"
 import { Picture, User } from "../models"
+import { Like } from "../models/like_model"
+import { Comment } from "../models/comment_model"
 import { Request, Response } from "express"
 import { db } from "../config"
 
@@ -242,24 +244,25 @@ export async function commentPicture(req: Request, res: Response) {
 
     try {
         const picture = await Picture.findById(pictureId);
-        if (picture.length === 0) {
+        if (!picture) {
             res.status(404).json({ error: 'Picture not found' });
             return;
         }
-        if (picture.length > 0) {
-            // Add the comment
-            const comment = new Comment({
-                user: userId,
-                text: text,
-                createdAt: new Date()
-            });
-
-
-            picture.comments.push(comment._id);
-            picture.comments.push(comment);
-            await picture.save();
-            return res.status(200).json({ message: 'Comment added successfully', comment });
+        // Add the comment
+        const comment = new Comment({
+            user: userId,
+            text: text,
+            createdAt: new Date()
+        });
+        await comment.save(); // Save the comment to the database to get its _id value
+        if (!picture.comments) {
+            picture.comments = [];
         }
+        picture.comments.push(comment);
+        picture.comments.push(comment._id); // Add the comment's _id value to the picture's comments array
+        await picture.save(); // Save the picture object with the new comment
+        return res.status(200).json({ message: 'Comment added successfully', comment });
+
     } catch (err) {
         console.error(err);
         res.status(500).json({ error: 'Internal server error' });
@@ -280,31 +283,29 @@ export async function likePicture(req: Request, res: Response) {
 
     const { userId, pictureId } = req.body;
     if (!userId || !pictureId) {
-        res.status(400).json({ error: 'Missing required fields' });
-        return;
+        return res.status(400).json({ error: 'Missing required fields' });
     }
     try {
         // Check if the picture exists
         const picture = await Picture.findById(pictureId);
-        if (picture.length === 0) {
+        if (!picture) {
             return res.status(404).json({ error: 'Picture not found' });
         }
-        if (picture.length > 0) {
-            // Check if the user has already liked the picture
-            if (picture.likes.includes(userId)) {
-                return res.status(400).json({ error: 'User has already liked this picture' });
-            }
-            // Add the comment
-            const like = new Like({
-                user: userId,
-                createdAt: new Date()
-            });
-            // Add the user ID to the picture's likes array
-            picture.likes.push(userId);
-            await picture.save();
-
-            return res.status(200).json({ message: 'Picture liked successfully', picture });
+        // Check if the user has already liked the picture
+        if (picture.likes.includes(userId)) {
+            return res.status(400).json({ error: 'User has already liked this picture' });
         }
+        // Add the comment
+        const like = new Like({
+            user: userId,
+            createdAt: new Date()
+        });
+        // Add the user ID to the picture's likes array
+        picture.likes.push(userId);
+        await picture.save();
+
+        return res.status(200).json({ message: 'Picture liked successfully', picture });
+
     } catch (error) {
         console.error(error);
         return res.status(500).json({ error: 'Internal server error' });

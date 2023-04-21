@@ -315,15 +315,18 @@ POST http://localhost:8082/api/picture/like  HTTP/1.1
 Content-Type: application/json
 
 { 
-   "pictureId": "644262017c10ba22212eae57",
+   "pictureId": "644290b88da7edec0bac0829",
     "userId" : "644261afa7c59d2ccdce2c4e"
 } 
+
+
+
 ### Comment
 POST http://localhost:8082/api/picture/comment  HTTP/1.1 
 Content-Type: application/json
 
 { 
-   "pictureId": "644262017c10ba22212eae57",
+   "pictureId": "644290b88da7edec0bac0829",
     "userId" : "644261afa7c59d2ccdce2c4e",
     "text" : " я так же умею"
 } 
