@@ -1,258 +1,399 @@
-# Information for API endpoints
+### User API endpoints
 
-All API endpoints have a path as follows: 'http://localhost:8081/api/ENDPOINTS'
-Do not forget to write API in the path!
-## Installation
+## https://bloggini-backend.onrender.com backend link
 
-To run backend, install
-`npm install`
-`cd src`
-`nohup ts-node server.ts`
-Configure an IP adress on MongoDB website for connecting to database. View the link here http://www.mongodb.com/docs/atlas/security/add-ip-address-to-list/.
+## API link https://bloggini-backend.onrender.com/api
 
+Change link of localhost to this backend (in my examples is mentioned localhost)
 
+## User API
 
+You can view router functions in router.ts
 
+router.post('/signup', userCtrl.signup)
+router.post('/login', userCtrl.login)
+router.get('/user/getInfo/:userId', userCtrl.getUserInfo) // change id to userId
+router.get('/user/getUserUserName/:userId', userCtrl.getUserUsername)
+router.post('/user/updateUserInfo', userCtrl.updateUserInfo)
+router.post('/user/updateUserPassword', userCtrl.updateUserPassword)
+router.delete('/user/deleteUser/:userId', userCtrl.deleteUser)
 
-### Link for frontend example for fetching API
-http://github.com/jaeyoungchang5/share-my-sunset 
-## User endpoints
+# Sign up
 
-# Signup User `'/signup'`
-
-```
- method: 'POST',
- headers: {'Content-Type': 'application/json'},
- body:
-  {
-        "firstName": "firstName",
-        "lastName": "req.body.lastName",
-        "username": "username",
-        "password": "password",
-        "bio": "bio"
-  }
-```
-
-Example:
+method : POST
+https://bloggini-backend.onrender.com/api/signup
 
 ```
-POST http://localhost:8081/api/signup  HTTP/1.1
+POST http://localhost:8082/api/signup HTTP/1.1
 Content-Type: application/json
 
 {
-    "firstName": "Ani",
-        "lastName": "Popins",
-        "username": "ani_po",
-        "password": "12345",
-        "bio": "Hey out there!"
+   "firstName" : "Maria1",
+   "lastName" : "Glushenkova1",
+   "username" : "maria_glushenkova1",
+   "password" : "12345",
+   "bio" : "I am creator of this testing mode."
 }
 ```
 
-# Login User `'/login'`
+Response
 
 ```
- method: 'POST',
- headers: {'Content-Type': 'application/json'},
-  body:
-  {
-    "username" : "username",
-    "password" : "password"
-  }
+{
+ "result": "success",
+ "message": "User signup"
+}
 ```
 
-Example:
+# Login
+
+method : GET
+https://bloggini-backend.onrender.com/api/login
 
 ```
-POST http://localhost:8081/api/login  HTTP/1.1
+POST http://localhost:8082/api/login HTTP/1.1
 Content-Type: application/json
 
 {
-    "username" : "john-dave",
-    "password" : "1234"
+    "username" : "maria_glushenkova",
+    "password" : "12345"
+}
+
+```
+
+# Get info of user
+
+method : GET
+https://bloggini-backend.onrender.com/api/user/getInfo/${userId}
+
+```
+GET http://localhost:8082/api/user/getInfo/6440f6be5c0a8d1a47a2ebbc  HTTP/1.1
+// Response
+
+{
+ "_id": "6440f6be5c0a8d1a47a2ebbc",
+ "firstName": "Maria",
+ "lastName": "Glushenkova",
+ "username": "maria_glushenkova",
+ "bio": "I am creator of this testing mode."
 }
 ```
 
-# Get Info of User `'/user/getInfo/:id'`
+# Get username
+
+method : GET
+https://bloggini-backend.onrender.com/api/user/getUserUserName/${userId}
 
 ```
- method: 'GET',
- GET   http://localhost:8081/api/user/getInfo/{userId}
-```
+###  Get username
+GET http://localhost:8082/api/user/getUserUserName/6440f6be5c0a8d1a47a2ebbc  HTTP/1.1
+// Response
 
-Example:
-
-```
-GET   http://localhost:8081/api/user/getInfo/642563d03d296424b95ac5dc  HTTP/1.1
-```
-
-# Get users username `'/user/getUserUserName/:id'`
-
-```
- method: 'GET',
-GET http://localhost:8081/api/user/getUserUserName/:id  HTTP/1.1
-```
-
-Example:
-
-```
-GET http://localhost:8081/api/user/getUserUserName/642563d03d296424b95ac5dc  HTTP/1.1
-```
-
-# Update users info `'/user/updateUserInfo'`
-
-```
- method: 'POST',
- headers: {'Content-Type': 'application/json'},
-  body:
-  {
-    "userId": "_id"
+{
+  "result": "success",
+  "data": {
+    "_id": "6440f6be5c0a8d1a47a2ebbc",
+    "username": "maria_glushenkova"
   }
-```
-
-Example:
+}
 
 ```
-POST http://localhost:8081/api/user/updateUserInfo  HTTP/1.1
+
+# Update user info
+
+method : POST
+https://bloggini-backend.onrender.com/api/user/updateUserInfo/${userId}
+
+```
+
+### Update user info
+POST http://localhost:8082/api/user/updateUserInfo/6440f6be5c0a8d1a47a2ebbc  HTTP/1.1
 Content-Type: application/json
 
 {
-    "userId": "642563d03d296424b95ac5dc"
+    "userId": "6440f6be5c0a8d1a47a2ebbc",
+    "username" : "maria_glushenkova",
+    "bio" : "new bio2"
+}
+
+// Response
+{
+  "result": "success",
+  "message": "User update successful"
 }
 ```
 
-# Update users password `'/user/updateUserPassword'`
+# Update user password
+
+method : POST
+https://bloggini-backend.onrender.com/api/user/updateUserPassword/${userId}
 
 ```
- method: 'POST',
- headers: {'Content-Type': 'application/json'},
-  body:
-  {
-    "userId": "_id"
-  }
-```
 
-Example:
-
-```
-POST http://localhost:8081/api/user/updateUserPassword HTTP/1.1
+### Update user password
+POST http://localhost:8082/api/user/updateUserPassword/6440f6be5c0a8d1a47a2ebbc  HTTP/1.1
 Content-Type: application/json
 
 {
-    "userId": "642563d03d296424b95ac5dc"
+    "userId": "6440f6be5c0a8d1a47a2ebbc",
+    "oldPassword" : "1235",
+    "newPassword" : "123567"
+}
+
+// Response
+
+# {
+#   "result": "success",
+#   "message": "Updated password",
+#   "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImJvZHkiOnsidXNlcklkIjoiNjQ0MGY2YmU1YzBhOGQxYTQ3YTJlYmJjIn19LCJpYXQiOjE2ODE5ODE2NzR9.3QPUD1r2PXUe9r9AVYG3BxykOyzGq51sMDnLLkfteAU"
+# }
+```
+
+# Delete user
+
+method : DELETE
+https://bloggini-backend.onrender.com/api/user/deleteUser/${userId}
+
+```
+
+// if user is already deleted
+{
+  "result": "error",
+  "message": "User not found"
+}
+
+// Response
+{
+  "result": "success",
+  "message": "User delete successful"
 }
 ```
 
-# Delete user `'/user/deleteUser'`
+# Create a feedback
+
+method : POST
+https://bloggini-backend.onrender.com/api/user/feedback
 
 ```
- method: 'DELETE',
-DELETE http://localhost:8081/api/user/deleteUser/:id HTTP/1.1
-```
 
-Example:
+### Feedback testing
+POST http://localhost:8082/api/user/feedback HTTP/1.1
+Content-Type: application/json
 
-```
-DELETE http://localhost:8081/api/user/deleteUser/642563d03d296424b95ac5dc HTTP/1.1
+{
+    "userId" : "644261afa7c59d2ccdce2c4e",
+    "name" : "Maria",
+    "message" : "how can I navigate the page???"
+}
+// Response
 
+{
+  "feedback": {
+    "user": "644261afa7c59d2ccdce2c4e",
+    "name": "Maria",
+    "message": "how can I navigate the page???",
+    "_id": "64426c19ca95447016332f22",
+    "createdAt": "2023-04-21T10:57:29.221Z",
+    "__v": 0
+  }
+}
 ```
 
 ## Picture endpoints
 
-### Post picture `'/picture'`
+# Share picture
+
+method : POST
+https://bloggini-backend.onrender.com/api/picture/sharePicture
+Was difficult to test, don`t know if works
 
 ```
-method: 'POST',
-     headers: { 'Content-Type': 'multipart/form-data; ', 'Accept': 'application/json' },
-body:
-  {
-    "userId": "_id",
-    "description" : "description",
-    "file" : "pictureImage"
-  }
-```
-
-Example:
-
-```
-POST http://localhost:8081/api/picture HTTP/1.1
-Content-Type: multipart/form-data
-Accept: application/json
-
-{
-    "userId": "642563d03d296424b95ac5dc",
-    "description" : "my first pic",
-    "file" : "file.png"
-}
-```
-
-### Get picture by id `'/picture/getPictureById/:pictureId'`
-
-```
-method: 'GET',
-GET http://localhost:8081/api/picture/getPictureById/:pictureId HTTP/1.1
-
-```
-
-Example:
-
-```
-POST http://localhost:8081/api/picture/getPictureById/:pictureId HTTP/1.1
-```
-
-### Get picture Id by User Id `'/picture/getPictureIdByUserId/:userId'`
-
-```
-method: 'GET',
-GET http://localhost:8081/api/picture/getPictureByUserId/:userId HTTP/1.1
-```
-
-Example:
-
-```
-GET http://localhost:8081/api/picture/getPictureById/:userId HTTP/1.1
-```
-
-### Delete picture `'/picture/deletePicture/:pictureId'`
-
-```
-method: 'DELETE',
-DELETE http://localhost:8081/api/picture/deletePicture/:pictureId HTTP/1.1
-```
-
-Example:
-
-```
-DELETE http://localhost:8081/api/picture/deletePicture/:pictureId HTTP/1.1
-```
-
-### Update picture caption `'/picture/updatePictureCaption'`
-
-```
-method: 'POST',
- headers: {'Content-Type': 'application/json'},
-body:
-  {
-    "pictureId": "pictureId",
-    "description" : "description"
-  }
-```
-
-Example:
-
-```
-POST http://localhost:8081/api/picture/updatePictureCaption HTTP/1.1
+### Share picture
+POST http://localhost:8082/api/picture/sharePicture HTTP/1.1
 Content-Type: application/json
 
 {
-    "pictureId": "642563d03d296424b95ac5dc",
-    "description" : "My new caption!"
+"userId" : "6440f6be5c0a8d1a47a2ebbc",
+"pictureImage": "pictureData",
+   "description": "A beautiful landscape",
+  "comments" : "[]",
+  "likes" : "[]"
 }
 ```
 
-### Get a post feed of all users `/users-posts`
+### Get picture by id
+
+method : GET
+https://bloggini-backend.onrender.com/api/picture/getPicture/${pictureId}
 
 ```
-method: 'GET',
-GET http://localhost:8081/api/users/users-posts HTTP/1.1
+GET http://localhost:8082/api/picture/getPicture/644262017c10ba22212eae57 HTTP/1.1
 
+// Response
+
+{
+"result": "success",
+"message": "Found post",
+"data": {
+"\_id": "644262017c10ba22212eae57",
+"userId": "644261afa7c59d2ccdce2c4e",
+"pictureImage": "some big encoded stuff",
+"description": "A beautiful landscape",
+"comments": [
+{
+"user": null,
+"text": "Nice pic!",
+"createdAt": "2023-04-21T10:14:25.089Z",
+"_id": "644262017c10ba22212eae58"
+}
+],
+"likes": [],
+"createdAt": "2023-04-21T10:14:25.138Z",
+"updatedAt": "2023-04-21T10:14:25.138Z",
+"\_\_v": 0
+}
+}
+```
+
+# Get posts of all users
+
+method : GET
+https://bloggini-backend.onrender.com/api/users-posts
+
+```
+
+### Get posts of  users
+GET   http://localhost:8082/api/users-posts  HTTP/1.1
+
+// Response
+
+[
+  {
+    "_id": "644261afa7c59d2ccdce2c4e",
+    "firstName": "Maria",
+    "lastName": "Glushenkova",
+    "username": "maria_glushenkova",
+    "password": "$2b$10$2xTfPsAa0GrwQY8swzBube4bo9hzKkWxwVVLxhCSxEFtRZ57VGtO.",
+    "bio": "I am creator of this testing mode.",
+    "privacyMode": 0,
+    "pictures": [],
+    "feedbacks": [],
+    "isDeleted": false,
+    "__v": 0,
+    "posts": [
+      {
+        "_id": "644262017c10ba22212eae57",
+        "userId": "644261afa7c59d2ccdce2c4e" ,
+        "description": "A beautiful landscape",
+        "comments": [
+          {
+            "user": "643fbc01bab3448131d7111d",
+            "text": "Nice pic!",
+            "createdAt": "2023-04-21T10:14:25.089Z",
+            "_id": "644262017c10ba22212eae58"
+          }
+        ],
+        "likes": [],
+        "createdAt": "2023-04-21T10:14:25.138Z",
+        "updatedAt": "2023-04-21T10:14:25.138Z",
+        "__v": 0
+      }
+    ]
+  }
+]
+```
+
+# Delete picture
+
+method : DELETE
+https://bloggini-backend.onrender.com/api/picture/deletePicture/${pictureId}
+
+```
+### Delete picture
+DELETE   http://localhost:8082/api/picture/deletePicture/644262017c10ba22212eae57 HTTP/1.1
+```
+
+# Like picture
+
+method : POST
+https://bloggini-backend.onrender.com/api/picture/like
+
+```
+### Like
+POST http://localhost:8082/api/picture/like  HTTP/1.1
+Content-Type: application/json
+
+{
+   "pictureId": "644290b88da7edec0bac0829",
+    "userId" : "644298d84468748a0de500ab"
+}
+// Response
+
+{
+  "message": "Picture liked successfully",
+  "picture": {
+    "_id": "644290b88da7edec0bac0829",
+    "userId": "64411b35fc94e163b94ee794",
+  }
+}
+```
+
+# Comment picture
+
+method : POST
+https://bloggini-backend.onrender.com/api/picture/comment
+
+```
+
+### Comment
+POST http://localhost:8082/api/picture/comment  HTTP/1.1
+Content-Type: application/json
+
+{
+   "pictureId": "644290b88da7edec0bac0829",
+    "userId" : "644298d84468748a0de500ab",
+    "text" : " маєш гарний сайт"
+}
+
+// Response
+
+{
+  "message": "Comment added successfully",
+  "comment": {
+    "user": "644298d84468748a0de500ab",
+    "text": " маєш гарний сайт",
+    "createdAt": "2023-04-21T14:11:09.270Z",
+    "_id": "6442997d4468748a0de500b6",
+    "__v": 0
+  }
+}
+```
+
+# Search sth
+
+method : POST
+https://bloggini-backend.onrender.com/api/search
+
+```
+### Search sth
+POST http://localhost:8082/api/search HTTP/1.1
+Content-Type: application/json
+
+{
+    "searchString": "maria_glushenkova"
+}
+
+
+{
+  "result": "success",
+  "data": [
+    {
+      "_id": "644261afa7c59d2ccdce2c4e",
+      "firstName": "Maria",
+      "lastName": "Glushenkova",
+      "username": "maria_glushenkova",
+      "pictures": []
+    }
+  ]
+}
 ```

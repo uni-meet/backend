@@ -45,19 +45,17 @@ router.delete('/user/deleteUser/:userId', userCtrl.deleteUser)
 // pictures API endpoints
 router.post('/picture/sharePicture', upload.single('pictureImage'), pictureCtrl.sharePicture)
 router.get('/picture/getPicture/:pictureId', pictureCtrl.getPictureById)
-
-router.get('/picture/getPictureByUserId/:userId', pictureCtrl.getPictureByUserId)
+// create a post feed of all users
+router.get('/users-posts', pictureCtrl.getAllPosts)
 router.delete('/picture/deletePicture/:pictureId', pictureCtrl.deletePicture)
-router.post('/picture/updatePictureCaption', pictureCtrl.updatePictureCaption)
 
-//TODO -  test backend APi routes and picture routes
-//TODO - check forntend on account of right fetching API
+
+
 
 // Like and comment
 router.post('/picture/like', pictureCtrl.likePicture);
 router.post('/picture/comment', pictureCtrl.commentPicture);
-// create a post feed of all users
-router.get('/users-posts', pictureCtrl.getAllPosts)
+
 // search
 router.post('/search', searchCtrl.searchUser);
 // feedback form

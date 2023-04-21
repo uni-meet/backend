@@ -12,9 +12,12 @@ import { db } from "../config"
  * Functions:
  * sharePicture
  * getPictureById
- * getPictureIdByUserId
+ * getAllPosts
+ * getPictureIdByUserId 
  * deletePicture
  * updatePictureCaption
+ * commentPicture
+ * likePicture
  */
 
 //FIXME - posts are not created, but visible in db
@@ -25,14 +28,14 @@ import { db } from "../config"
  * @param {Object} req.file Content of post
  */
 export function sharePicture(req: Request, res: Response) {
-    if (!req.body.userId || !req.body.description || !req.file) {
+    if (!req.body.userId || !req.body.description || !req.image) {
         res.status(400).json({ result: 'error', message: 'Unsatisfied requirements for posting a picture' })
         return
     }
     const body = {
         userId: new mongoose.Types.ObjectId(req.body.userId),
         description: req.body.description,
-        pictureImage: req.file.filename
+        pictureImage: req.file.image
     }
     //NOTE - function User.findOne always compares _id with userId !!!
     User.findOne({ _id: body.userId, isDeleted: false })
@@ -101,53 +104,6 @@ export async function getPictureById(req: Request, res: Response) {
     } catch (error) {
         debuglog('ERROR', 'picture controller - getUserPics', 'posts are not found')
         res.status(404).json({ message: error.message });
-    }
-
-}
-//FIXME - Get pics by USER id (deprecated)
-/**
- * @function Get pictures by User`s ID
- * @param {ObjectId} req.params.userId The _id of a user
- */
-export async function getPictureByUserId(req: Request, res: Response) {
-    if (!req.params.userId) {
-        res.status(400).json({ result: 'error', message: 'Unsatisfied requirements for finding pictures of this user' })
-        return
-    }
-
-    try {
-        const userId = req.params.userId;
-        const pictures = await Picture.find({ userId: userId, isDeleted: false })
-            .sort({ createdAt: 'descending' })
-            .populate("likes", "username")
-            .populate({
-                path: "comments",
-                populate: {
-                    path: "user",
-                    select: "username",
-                },
-            });
-
-        // FIXME -  userId - ?
-        // const pictures = Picture.find({ userId: params.userId, isDeleted: false })
-        // .select('_id')
-        // .sort({ createdAt: 'descending' })
-        if (pictures.length === 0) {
-            debuglog('ERROR', 'picture controller - getUserPics', 'user has no posts');
-            res.status(404).json({ result: 'error', message: 'User has no posts', data: pictures });
-            return;
-        }
-        if (pictures.length > 0) {
-            debuglog('LOG', 'picture controller - getUserpics', 'posts  found')
-            res.status(200).json({ result: "success", message: "Posts found ", data: pictures })
-        }
-    } catch (error: any) {
-        if (error.name === 'ValidationError') {
-            const messages = Object.values(error.errors).map((val: any) => val.message);
-            return res.status(400).json({ error: messages.join(', ') });
-        }
-        console.error(error);
-        return res.status(500).json({ message: 'Error finding post.' });
     }
 
 }
@@ -245,8 +201,7 @@ export async function commentPicture(req: Request, res: Response) {
     try {
         const picture = await Picture.findById(pictureId);
         if (!picture) {
-            res.status(404).json({ error: 'Picture not found' });
-            return;
+            return res.status(404).json({ error: 'Picture not found' });
         }
         // Add the comment
         const comment = new Comment({
@@ -285,9 +240,10 @@ export async function likePicture(req: Request, res: Response) {
     if (!userId || !pictureId) {
         return res.status(400).json({ error: 'Missing required fields' });
     }
+
     try {
-        // Check if the picture exists
         const picture = await Picture.findById(pictureId);
+        // Check if the picture exists
         if (!picture) {
             return res.status(404).json({ error: 'Picture not found' });
         }
@@ -300,10 +256,14 @@ export async function likePicture(req: Request, res: Response) {
             user: userId,
             createdAt: new Date()
         });
-        // Add the user ID to the picture's likes array
-        picture.likes.push(userId);
-        await picture.save();
+        await like.save()
+        if (!picture.likes) {
+            picture.likes = []
+        }
+        picture.likes.push(like)
 
+        picture.likes.push(userId);  // Add the user ID to the picture's likes array
+        await picture.save();
         return res.status(200).json({ message: 'Picture liked successfully', picture });
 
     } catch (error) {

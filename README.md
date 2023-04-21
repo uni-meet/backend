@@ -19,6 +19,7 @@ This backend is created with:
 - Signup
 - Login
 - Get user info
+- Get users username
 - Update user info
 - Update user password
 - Delete user
@@ -26,12 +27,14 @@ This backend is created with:
 ### Pictures
 
 - Share Picture
-- Get Picture (single)
-- Get Pictures By User
+- Get Picture By its ID
+- Get all users posts
 - Delete Pictures
-- Update Caption
-
-- Get all users posts( main page )
+### Additional new features
+- Like picture
+- Comment picture
+- Search on a website (username, or sth else)
+- Create feedback form
 ### API endpoints
 
 All the endpoints follow the structure:

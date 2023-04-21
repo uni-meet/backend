@@ -21,10 +21,7 @@ const PORT: any = process.env.PORT || 8082; // change to port
 connectDB() // connect to database
 app.use(body_parser.json())
 app.use(
-    cors({
-        origin: 'https://unigram.onrender.com',
-        credentials: true,
-    })
+    cors()
 );
 app.use(body_parser.urlencoded({ extended: true }))
 app.use('/api', router)  // all api routes will follow 'https://localhost:PORT/api/ENDPOINTS' format
