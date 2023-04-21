@@ -27,12 +27,13 @@ Content-Type: application/json
     "password" : "12345",
     "bio" : "I am creator of this testing mode."
 }
+
 ### Login a new user
  POST http://localhost:8082/api/login HTTP/1.1
 Content-Type: application/json
 
 {
-    "username" : "maria_glushenkova2",
+    "username" : "maria_glushenkova",
     "password" : "12345"
 }
 
@@ -145,12 +146,59 @@ Content-Type: application/json
 } 
 
 ### Get picture 
-GET http://localhost:8082/api/picture/getPicture/64410ce5cbeb57810235b404 HTTP/1.1
+GET http://localhost:8082/api/picture/getPicture/644262017c10ba22212eae57 HTTP/1.1
+
+### Post picture
+POST http://localhost:8082/api/picture/sharePicture
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
+
+----WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="userId"
+
+<644261afa7c59d2ccdce2c4e>
+----WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="description"
+
+<lalalalalalal>
+----WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="pictureImage"; filename="<./test.png>"
+Content-Type: image/png
+
+<0000000000000000000000000000000000000000
+0000000000000000000000000000000000000000
+0000000000000000000000000000000000000000
+0000000000000000000000000000000000000000
+0000000000000000000000000000000000000000
+0000000000000000000000000000000000000000
+0000000000000000000000000000000000000000
+0000000000000000000000000000000000000000
+0000000000000000000000000000000000000000
+0000000000000000000000000000000000000000
+0000000000000000000000000000000000000000
+0000000000000000000000000000000000000000
+0000000000000000000000000000000000000000
+0000000000000000000000000000000000000000
+0000000000000000000000000000000000000000
+0000000000000000000000000000000000000000
+0000000000000000000000000000000000000000
+0000000000000000000000000000000000000000
+0000000000000000000000000000000000000000
+0000000000000000000000000000000000000000
+0000000000000000000000000000000000000000
+0000000000000000000000000000000000000000
+0000000000000000000000000000000000000000
+0000000000000000000000000000000000000000
+0000000000000000000000000000000000000000
+0000000000000000000000000000000000000000
+
+>
+----WebKitFormBoundary7MA4YWxkTrZu0gW--
+
 
 
 
 ### Get picture by User Id
-GET http://localhost:8082/api/picture/getPictureByUserId/64411b35fc94e163b94ee794 HTTP/1.1
+GET http://localhost:8082/api/picture/getPictureByUserId/644261afa7c59d2ccdce2c4e HTTP/1.1
 
 // Response 
 
@@ -165,56 +213,120 @@ example of pic
 */
 
 
-
-GET http://localhost:8082/api/picture/getPicture/644167e7716ad9b64b58edae HTTP/1.1
 ### Get picture by id
+GET http://localhost:8082/api/picture/getPicture/644262017c10ba22212eae57 HTTP/1.1
 
+// Response
+
+{
+  "result": "success",
+  "message": "Found post",
+  "data": {
+    "_id": "644262017c10ba22212eae57",
+    "userId": "644261afa7c59d2ccdce2c4e",
+    "pictureImage": "some big encoded stuff",
+    "description": "A beautiful landscape",
+    "comments": [
+      {
+        "user": null,
+        "text": "Nice pic!",
+        "createdAt": "2023-04-21T10:14:25.089Z",
+        "_id": "644262017c10ba22212eae58"
+      }
+    ],
+    "likes": [],
+    "createdAt": "2023-04-21T10:14:25.138Z",
+    "updatedAt": "2023-04-21T10:14:25.138Z",
+    "__v": 0
+  }
+}
 
 ### Get posts of  users
-GET   https://bloggini-backend.onrender.com/api/users-posts  HTTP/1.1
+GET   http://localhost:8082/api/users-posts  HTTP/1.1
 
-### Get all pictures
-GET   https://bloggini-backend.onrender.com/api/pics  HTTP/1.1
+// Response
 
+[
+  {
+    "_id": "644261afa7c59d2ccdce2c4e",
+    "firstName": "Maria",
+    "lastName": "Glushenkova",
+    "username": "maria_glushenkova",
+    "password": "$2b$10$2xTfPsAa0GrwQY8swzBube4bo9hzKkWxwVVLxhCSxEFtRZ57VGtO.",
+    "bio": "I am creator of this testing mode.",
+    "privacyMode": 0,
+    "pictures": [],
+    "feedbacks": [],
+    "isDeleted": false,
+    "__v": 0,
+    "posts": [
+      {
+        "_id": "644262017c10ba22212eae57",
+        "userId": "644261afa7c59d2ccdce2c4e" ,
+        "description": "A beautiful landscape",
+        "comments": [
+          {
+            "user": "643fbc01bab3448131d7111d",
+            "text": "Nice pic!",
+            "createdAt": "2023-04-21T10:14:25.089Z",
+            "_id": "644262017c10ba22212eae58"
+          }
+        ],
+        "likes": [],
+        "createdAt": "2023-04-21T10:14:25.138Z",
+        "updatedAt": "2023-04-21T10:14:25.138Z",
+        "__v": 0
+      }
+    ]
+  }
+]
+
+//NOTE - deprecated, use users-posts endpoint Get all pictures
+GET   http://localhost:8082/api/pics  HTTP/1.1
+
+
+//NOTE -  use instead of getUserPictureById
 ### Search sth
 POST http://localhost:8082/api/search HTTP/1.1
 Content-Type: application/json
 
 { 
     "searchString": "maria_glushenkova"
-} 
-
-// Response
-{
-  "result": "success",
-  "data": [
-    {
-      "_id": "6440f6be5c0a8d1a47a2ebbc",
-      "firstName": "Maria",
-      "lastName": "Glushenkova",
-      "username": "maria_glushenkova"
-    }
-  ]
 }
-picture controller - getUserPics :: user has no posts 
-
-### Search sth on server
-POST http://localhost:8082/api/search HTTP/1.1
+//FIXME -  
+### Update picture caption
+POST http://localhost:8082/api/picture/updatePictureCaption  HTTP/1.1
 Content-Type: application/json
 
 { 
-    "searchString": "maria_glushenkova"
+    "pictureId": "644262017c10ba22212eae57",
+    "description" : "New description"
 } 
-//TODO - likes and comments testing
 
-### Login a new user
- POST http://localhost:8082/api/login HTTP/1.1
+### Delete picture
+GET  http://localhost:8082/api/picture/deletePicture/644262017c10ba22212eae57 HTTP/1.1
+
+
+
+
+//TODO - likes and comments testing
+### Like
+POST http://localhost:8082/api/picture/like  HTTP/1.1 
 Content-Type: application/json
 
-{
-    "username" : "maria_glushenkova2",
-    "password" : "12345"
-}
+{ 
+   "pictureId": "644262017c10ba22212eae57",
+    "userId" : "644261afa7c59d2ccdce2c4e"
+} 
+### Comment
+POST http://localhost:8082/api/picture/comment  HTTP/1.1 
+Content-Type: application/json
+
+{ 
+   "pictureId": "644262017c10ba22212eae57",
+    "userId" : "644261afa7c59d2ccdce2c4e",
+    "text" : " я так же умею"
+} 
 
 
 ### Feedback testing
@@ -222,15 +334,19 @@ POST http://localhost:8082/api/user/feedback HTTP/1.1
 Content-Type: application/json
 
 { 
-    "userId" : "64411b35fc94e163b94ee794",
-    "name" : "Complain",
-    "message" : "your site is miserable"
+    "userId" : "644261afa7c59d2ccdce2c4e",
+    "name" : "Maria",
+    "message" : "how can I navigate the page???"
 }
+// Response
 
-### Search sth
-POST http://localhost:8082/api/search HTTP/1.1
-Content-Type: application/json
-
-{ 
-    "searchString": "maria_glushenkova"
-} 
+{
+  "feedback": {
+    "user": "644261afa7c59d2ccdce2c4e",
+    "name": "Maria",
+    "message": "how can I navigate the page???",
+    "_id": "64426c19ca95447016332f22",
+    "createdAt": "2023-04-21T10:57:29.221Z",
+    "__v": 0
+  }
+}

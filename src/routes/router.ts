@@ -49,16 +49,15 @@ router.get('/picture/getPicture/:pictureId', pictureCtrl.getPictureById)
 router.get('/picture/getPictureByUserId/:userId', pictureCtrl.getPictureByUserId)
 router.delete('/picture/deletePicture/:pictureId', pictureCtrl.deletePicture)
 router.post('/picture/updatePictureCaption', pictureCtrl.updatePictureCaption)
-// add comments
-router.post('/picture/addComment', pictureCtrl.addComment);
+
 //TODO -  test backend APi routes and picture routes
 //TODO - check forntend on account of right fetching API
 
+// Like and comment
+router.post('/picture/like', pictureCtrl.likePicture);
+router.post('/picture/comment', pictureCtrl.commentPicture);
 // create a post feed of all users
 router.get('/users-posts', pictureCtrl.getAllPosts)
-// display all pictures
-router.get('/pics', pictureCtrl.getAllPics)
-
 // search
 router.post('/search', searchCtrl.searchUser);
 // feedback form

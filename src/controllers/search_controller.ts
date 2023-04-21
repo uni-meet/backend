@@ -32,13 +32,14 @@ import { error } from 'console';
 
 // }
 //FIXME - not working
-export async function searchUser(req: Request, res: Response) {
+export async  function searchUser(req: Request, res: Response) {
 
     if (!req.body.searchString) {
         res.status(400).json({ result: 'error', message: 'unsatisfied requirements' });
         return;
     }
-    User.aggregate([
+    try { 
+    const result = await User.aggregate([
         {
             $match: {
                 $text: { $search: req.body.searchString }
@@ -69,15 +70,11 @@ export async function searchUser(req: Request, res: Response) {
             }
         }
     ])
-
-        .then(searchResults => {
-            debuglog('LOG', 'search controller - search users', 'completed search');
-            res.status(200).json({ result: 'success', data: searchResults });
-        })
-
-        .catch(error); {
+        debuglog('LOG', 'search controller - search users', 'completed search');
+        return res.status(200).json({ result: 'success', data: result });
+    } catch(error) {
         console.log(error)
-        res.status(500).send('Error searching results')
-
+        return res.status(500).send('Error searching results')
+        
     }
 }

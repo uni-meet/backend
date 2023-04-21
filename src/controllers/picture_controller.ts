@@ -60,27 +60,18 @@ export function sharePicture(req: Request, res: Response) {
         })
 
 }
-// ANCHOR - testing pictures
-// test user
-// {
-//     "_id": "123",
-//         "firstName": "Maria",
-//             "lastName" : "Glushenkova",
-//                 "username" : "maria",
-//                     "password" : "123",
-//                         "bio" : "Test here!",
-//                             "privacyMode" : "1",
-//                                 "pictures" : [],
 
-// }
-// import fs from 'fs' // import the Node.js file system module
+
+
+import fs from 'fs' // import the Node.js file system module
+import { Like } from "../models/like_model"
 
 // // read the picture file from disk
 // const pictureData = fs.readFileSync('./test.png');
 
 // // create a new instance of the Picture model
 // const picture = new Picture({
-//     userId: "64411b35fc94e163b94ee794", // replace with the user ID
+//     userId: "644261afa7c59d2ccdce2c4e", // replace with the user ID
 //     pictureImage: pictureData, // set the picture data as a Buffer
 //     description: 'A beautiful landscape', // replace with the picture description
 //     comments: [{
@@ -220,6 +211,7 @@ export async function getPictureById(req: Request, res: Response) {
     }
 
 }
+//FIXME - Get pics by USER id
 /**
  * @function Get pictures by User`s ID
  * @param {ObjectId} req.params.userId The _id of a user
@@ -229,47 +221,41 @@ export async function getPictureByUserId(req: Request, res: Response) {
         res.status(400).json({ result: 'error', message: 'Unsatisfied requirements for finding pictures of this user' })
         return
     }
-    const params = {
-        // create new user id
-        _id: new mongoose.Types.ObjectId(req.params.userId)
-    }
-    // const picture = await Picture.findById(params.userId)
-    //     .sort({ createdAt: 'descending' })
-    //     .populate("likes", "username")
-    //     .populate({
-    //         path: "comments",
-    //         populate: {
-    //             path: "user",
-    //             select: "username",
-    //         },
-    //     });
 
-    // if (!picture) {
-    //     debuglog('ERROR', 'picture controller - getUserPics', 'user has no posts');
-    //     res.status(404).json({ message: error.message });
-    //     throw new Error("Picture not found");
-        
-    // }
+    try {
+        const userId = req.params.userId;
+        const pictures = await Picture.find({ userId: userId, isDeleted: false })
+            .sort({ createdAt: 'descending' })
+            .populate("likes", "username")
+            .populate({
+                path: "comments",
+                populate: {
+                    path: "user",
+                    select: "username",
+                },
+            });
 
-    // if (picture) {
-
-    //     res.status(200).json({ result: "success", message: "Found post", data: picture })
-    // }
-   // FIXME -  userId - ?
-    Picture.find({ _id: params.userId, isDeleted: false }).select('_id').sort({ createdAt: 'descending' })
-    .then((pictureIds) => {
-        if (!pictureIds) {
+        // FIXME -  userId - ?
+        // const pictures = Picture.find({ userId: params.userId, isDeleted: false })
+        // .select('_id')
+        // .sort({ createdAt: 'descending' })
+        if (pictures.length === 0) {
             debuglog('ERROR', 'picture controller - getUserPics', 'user has no posts');
-            res.status(200).json({ result: 'success', message: 'User has no posts', data: pictureIds });
+            res.status(404).json({ result: 'error', message: 'User has no posts', data: pictures });
             return;
         }
-        debuglog('LOG', 'picture controller - getUserpics', 'posts  found')
-        res.status(200).json({ result: "success", message: "Posts found ", data: pictureIds })
-    }).catch(error => {
-        debuglog('ERROR', 'picture controller - getUserPics', 'posts are not found')
-        res.status(400).json(error)
-        return
-    })
+        if (pictures.length > 0) {
+            debuglog('LOG', 'picture controller - getUserpics', 'posts  found')
+            res.status(200).json({ result: "success", message: "Posts found ", data: pictures })
+        }
+    } catch (error: any) {
+        if (error.name === 'ValidationError') {
+            const messages = Object.values(error.errors).map((val: any) => val.message);
+            return res.status(400).json({ error: messages.join(', ') });
+        }
+        console.error(error);
+        return res.status(500).json({ message: 'Error finding post.' });
+    }
 
 }
 // get user by it`s id 
@@ -375,9 +361,9 @@ export function updatePictureCaption(req: Request, res: Response) {
         return;
     }
     const body = {
-        description: req.body.description
+        description: req.body.description,
     }
-    User.updateOne({ _id: req.body.pictureId }, { $set: body })
+    Picture.updateOne({ _id: req.body.pictureId, description: req.body.description }, { $set: body })
 
         .then((dbResponse) => {
             // if 1 document was changed
@@ -421,118 +407,84 @@ export async function getAllPosts(req: Request, res: Response) {
         console.error(error);
     }
 }
-/**
- * @function get all posts
- * @param req 
- * @param res 
- * @returns 
- */
-/**
- * @function get all users pictures
- * Creates an inner join operation between user and pictures collection
- */
-export async function getAllPics(req: Request, res: Response) {
+
+
+export async function commentPicture(req: Request, res: Response) {
+    const { userId, pictureId, text } = req.body;
+
+    if (!userId || !pictureId || !text) {
+        res.status(400).json({ error: 'Missing required fields' });
+        return;
+    }
+
+
     try {
-        const users = db.collection('users')
-        const pictures = db.collection('pictures')
-
-        const allUsers = await users.aggregate([
-            {
-                $lookup: {
-                    from: 'pictures',
-                    localField: '_id',
-                    foreignField: 'userId',
-                    as: 'posts'
-                }
-            },
-            {
-                $project: {
-                    password: 0, // exclude password field from output
-                    'posts.pictureImage': 0, // exclude pictureImage field from post output
-                    'posts.comments.user.password': 0 // exclude password field from comment output
-                }
-            }
-        ]).toArray()
-        res.send(allUsers)
-    }
-    catch (error) {
-        console.error(error);
-        res.status(500).send('Error fetching users and posts')
-    }
-}
-
-// function get Likes on pictures
-export async function likePicture(req: Request, res: Response) {
-    if (!req.params.userId || !req.params._id) {
-        res.status(400).json({ result: 'error', message: 'Unsatisfied requirements' })
-        return
-    }
-    try {
-        const params = {
-            // create new user id
-            _id: new mongoose.Types.ObjectId(req.params._id)
+        const picture = await Picture.findById(pictureId);
+        if (picture.length === 0) {
+            res.status(404).json({ error: 'Picture not found' });
+            return;
         }
-        const picture = await Picture.findOne({ _id: params._id });
+        if (picture.length > 0) {
+            // Add the comment
+            const comment = new Comment({
+                user: userId,
+                text: text,
+                createdAt: new Date()
+            });
 
 
-        if (!picture) {
-            return res.status(404).json({ error: 'Picture not found' });
+            picture.comments.push(comment._id);
+            picture.comments.push(comment);
+            await picture.save();
+            return res.status(200).json({ message: 'Comment added successfully', comment });
         }
-
-        if (picture.likes.includes(userId)) {
-            return res.status(400).json({ error: 'User has already liked this picture' });
-        }
-
-        picture.likes.push(userId);
-        await picture.save();
-
-        return res.status(200).json({ message: 'Picture liked successfully', picture });
     } catch (err) {
         console.error(err);
-        return res.status(500).json({ error: 'Internal server error' });
+        res.status(500).json({ error: 'Internal server error' });
     }
-
 }
-/**Comment function
- * @function
+
+/**
+ * Like a picture.
+ *
+ * Request body:
+ * {
+ *   "userId": "the user ID who likes the picture",
+ *   "pictureId": "the ID of the picture being liked"
+ * }
  */
-//FIXME - POST request, change parameters, add body params and more error handling
-export async function addComment(req: Request, res: Response) {
-    if (!req.body.userId || !req.body.pictureId || !req.body.text) {
-        res.status(400).json({ result: 'error', message: 'Unsatisfied requirements' })
-        return
+
+export async function likePicture(req: Request, res: Response) {
+
+    const { userId, pictureId } = req.body;
+    if (!userId || !pictureId) {
+        res.status(400).json({ error: 'Missing required fields' });
+        return;
     }
-
-
     try {
-        const body = {
-            userId: new mongoose.Types.ObjectId(req.body.userId),
-            pictureId: new mongoose.Types.ObjectId(req.body.pictureId),
-            text: req.body.text
-        }
-        const picture = await Picture.findOne({ _id: body.pictureId });
-        if (!picture) {
+        // Check if the picture exists
+        const picture = await Picture.findById(pictureId);
+        if (picture.length === 0) {
             return res.status(404).json({ error: 'Picture not found' });
         }
+        if (picture.length > 0) {
+            // Check if the user has already liked the picture
+            if (picture.likes.includes(userId)) {
+                return res.status(400).json({ error: 'User has already liked this picture' });
+            }
+            // Add the comment
+            const like = new Like({
+                user: userId,
+                createdAt: new Date()
+            });
+            // Add the user ID to the picture's likes array
+            picture.likes.push(userId);
+            await picture.save();
 
-        const comment = new Comment({
-            user: body.userId,
-            text: body.text,
-            createdAt: Date.now()
-        });
-        const savedComment = await picture.save();
-        picture.comments.push(comment._id);
-
-        debuglog('LOG', 'comment controller', 'comment  posted')
-        return res.status(200).json({ comment: savedComment });
-
-    } catch (error: any) {
-        if (error.name === 'ValidationError') {
-            const messages = Object.values(error.errors).map((val: any) => val.message);
-            return res.status(400).json({ error: messages.join(', ') });
+            return res.status(200).json({ message: 'Picture liked successfully', picture });
         }
+    } catch (error) {
         console.error(error);
-        return res.status(500).json({ message: 'Error sending feedback.' });
+        return res.status(500).json({ error: 'Internal server error' });
     }
 }
-
