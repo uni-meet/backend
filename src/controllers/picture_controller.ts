@@ -1,4 +1,4 @@
-// @ts-nocheck
+
 import mongoose from "mongoose"
 import { debuglog } from "../helpers"
 import { Picture, User } from "../models"
@@ -27,7 +27,7 @@ import { db } from "../config"
  * @param {string} req.body.description Description
  * @param {Object} req.file Content of post
  */
-export async function sharePicture(req: Request, res: Response) {
+export  function sharePicture(req: Request, res: Response) {
     if (!req.body.userId || !req.body.description || !req.image) {
         res.status(400).json({ result: 'error', message: 'Unsatisfied requirements for posting a picture' })
         return
@@ -39,7 +39,7 @@ export async function sharePicture(req: Request, res: Response) {
     }
     //NOTE - function User.findOne always compares _id with userId !!!
     User.findOne({ _id: body.userId, isDeleted: false })
-        .then((foundUser) => {
+        .then(async (foundUser) => {
             if (!foundUser) {
                 debuglog('ERROR', 'picture controller - share(post)', 'user not found');
                 res.status(404).json({ result: 'error', message: 'User not found.' });
@@ -50,7 +50,7 @@ export async function sharePicture(req: Request, res: Response) {
             if (!foundUser.pictures) {
                 // if user has no array of pictures, initialize new array
                 foundUser.pictures = [],
-                    comments = [],
+                    foundUser.comments = [],
                     likes = []
             }
             // if user has an array of pictures, then save the id of picture and push to an array
