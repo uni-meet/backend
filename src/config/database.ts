@@ -8,8 +8,6 @@ import { debuglog } from '../helpers/debuglog';
 
 let db: Connection;
 
-console.log('MONGODB_URI:', process.env.MONGODB_URI);
-
 const databaseUrl: any = process.env.MONGODB_URI;
 
 function connectDB(): void {
