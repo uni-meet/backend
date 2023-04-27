@@ -5,7 +5,6 @@
 
 // import dependencies
 
-import { RequestHandler } from 'express';
 import multer, { Multer } from "multer";
 import MulterGridfsStorage from "multer-gridfs-storage";
 
@@ -24,11 +23,7 @@ const storage = new MulterGridfsStorage({
     }
 });
 
-const uploadMiddleware = multer({
+export const upload = multer({
     storage
-}) as Multer & {
-  single(field: string): RequestHandler;
-};
-
-export const upload = uploadMiddleware.single('image');
+})
 
