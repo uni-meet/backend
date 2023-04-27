@@ -5,6 +5,7 @@
 
 // import dependencies
 
+import { RequestHandler } from 'express';
 import multer, { Multer } from "multer";
 import MulterGridfsStorage from "multer-gridfs-storage";
 
