@@ -26,3 +26,4 @@ const storage = new MulterGridfsStorage({
 export const upload = (multer({
     storage
 }).single('image') as RequestHandler);
+
