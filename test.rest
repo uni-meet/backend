@@ -390,5 +390,5 @@ Content-Type: application/json
 { 
    "pictureId": "644290b88da7edec0bac0829",
     "userId" : "644298d84468748a0de500ab",
-    "text" : " маєш гарний сайт"
+    "text" : " красивый ландшафт "
 } 

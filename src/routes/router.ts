@@ -43,7 +43,7 @@ router.delete('/user/deleteUser/:userId', userCtrl.deleteUser)
 
 
 // pictures API endpoints
-router.post('/picture/sharePicture', upload.single('pictureImage'), pictureCtrl.sharePicture)
+router.post('/picture/sharePicture', upload.single('image'), pictureCtrl.sharePicture)
 router.get('/picture/getPicture/:pictureId', pictureCtrl.getPictureById)
 // create a post feed of all users
 router.get('/users-posts', pictureCtrl.getAllPosts)

@@ -27,7 +27,7 @@ import { db } from "../config"
  * @param {string} req.body.description Description
  * @param {Object} req.file Content of post
  */
-export function sharePicture(req: Request, res: Response) {
+export async function sharePicture(req: Request, res: Response) {
     if (!req.body.userId || !req.body.description || !req.image) {
         res.status(400).json({ result: 'error', message: 'Unsatisfied requirements for posting a picture' })
         return
@@ -46,7 +46,7 @@ export function sharePicture(req: Request, res: Response) {
                 return;
             }
             const picture = new Picture(body, { comments: [], likes: [] })
-            picture.save()
+            await picture.save()
             if (!foundUser.pictures) {
                 // if user has no array of pictures, initialize new array
                 foundUser.pictures = [],

@@ -16,10 +16,10 @@ import MulterGridfsStorage from "multer-gridfs-storage";
 const url: any = process.env.MONGODB_URI;
 const storage = new MulterGridfsStorage({
     url,
-    file: (req: any, file: any) => {
+    file: (req: any, image: any) => {
         return {
-            bucketName: 'images00',
-            filename: new Date().toISOString() + file.originalname
+            bucketName: 'fs',
+            filename: new Date().toISOString() + image.originalname
         }
     }
 })
