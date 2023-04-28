@@ -57,7 +57,11 @@ export  function sharePicture(req: Request, res: Response) {
             foundUser.pictures.push(picture._id)
             foundUser.save()
             debuglog('LOG', 'picture controller - sharePicture', 'picture  posted')
-            res.status(201).json({ result: "success", message: "New picture posted " })
+            res.status(201).json({
+                result: "success",
+                message: "New picture posted",
+                pictureId: picture._id
+              });
         }).catch(error => {
             debuglog('ERROR', 'picture controller - sharePicture', error)
             res.status(400).json(error)
