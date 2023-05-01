@@ -46,8 +46,10 @@ export  function sharePicture(req: Request, res: Response) {
                 res.status(404).json({ result: 'error', message: 'User not found.' });
                 return;
             }
-            const picture = new Picture(body, { comments: [], likes: [] })
-            await picture.save()
+            const picture = new Picture(body, { comments: [], likes: [] });
+            await picture.save();
+
+            console.log("Saved picture:", picture);
             if (!foundUser.pictures) {
                 // if user has no array of pictures, initialize new array
                 foundUser.pictures = [],

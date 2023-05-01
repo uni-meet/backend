@@ -19,3 +19,4 @@ export async function getGridFSBucket(): Promise<GridFSBucket> {
   }
 }
 
+console.log("MONGODB_URI:", process.env.MONGODB_URI);
