@@ -6,6 +6,7 @@ import { Like } from "../models/like_model"
 import { Comment } from "../models/comment_model"
 import { Request, Response } from "express"
 import { db } from "../config"
+import { getGridFSBucket } from "../config/gridfs";
 
 /**
  * @fileoverview This file contains all controller functions for pictures.
@@ -75,41 +76,43 @@ export  function sharePicture(req: Request, res: Response) {
 */
 
 export async function getPictureById(req: Request, res: Response) {
-    if (!req.params.pictureId) { // response should be according API endpoint, and change what is sent to db
-        res.status(400).json({ result: "error", message: "Unsatisfied requirements for getting picture" })
-        return;
-    }
-    //NOTE  req.params according to API
-    const params = {
-        _id: new mongoose.Types.ObjectId(req.params.pictureId) // add type ObjectId to userId , req.params according to API
-    }
-    try {
-        const picture = await Picture.findById(params._id)
-            .populate("likes", "username")
-            .populate({
-                path: "comments",
-                populate: {
-                    path: "user",
-                    select: "username",
-                },
-            });
+  if (!req.params.pictureId) {
+    res.status(400).json({ result: "error", message: "Unsatisfied requirements for getting picture" });
+    return;
+  }
 
-        if (!picture) {
-            debuglog('ERROR', 'picture controller - getUserPics', 'user has no posts');
-            throw new Error("Picture not found");
-        }
+  const params = {
+    _id: new mongoose.Types.ObjectId(req.params.pictureId)
+  };
 
-        if (picture) {
+  try {
+    const picture = await Picture.findById(params._id)
+      .populate("likes", "username")
+      .populate({
+        path: "comments",
+        populate: {
+          path: "user",
+          select: "username",
+        },
+      });
 
-            res.status(200).json({ result: "success", message: "Found post", data: picture })
-        }
-
-
-    } catch (error) {
-        debuglog('ERROR', 'picture controller - getUserPics', 'posts are not found')
-        res.status(404).json({ message: error.message });
+    if (!picture) {
+      debuglog('ERROR', 'picture controller - getUserPics', 'user has no posts');
+      throw new Error("Picture not found");
     }
 
+    if (picture) {
+      const gridFSBucket = await getGridFSBucket();
+      const readStream: GridFSBucketReadStream = gridFSBucket.openDownloadStream(picture._id);
+      readStream.on("error", (error) => {
+        res.status(404).json({ result: "error", message: "Image not found." });
+      });
+      readStream.pipe(res);
+    }
+  } catch (error) {
+    debuglog('ERROR', 'picture controller - getUserPics', 'posts are not found');
+    res.status(404).json({ message: error.message });
+  }
 }
 
 export async function deletePicture(req: Request, res: Response) {
