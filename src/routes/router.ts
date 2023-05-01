@@ -10,6 +10,8 @@ import * as userCtrl from "../controllers/user_controller"
 import * as pictureCtrl from "../controllers/picture_controller"
 import * as searchCtrl from '../controllers/search_controller'
 import * as feedback from '../controllers/feedback_controller'
+import { upload } from "../config/images";
+
 
 
 
@@ -42,8 +44,18 @@ router.post('/user/updateUserPassword', userCtrl.updateUserPassword)
 router.delete('/user/deleteUser/:userId', userCtrl.deleteUser)
 
 
+
+// Route to handle file upload
+router.post('/upload', upload.single('image'), (req: Request, res: Response) => {
+    // Handle file upload logic here
+    console.log(req.file); // Print uploaded file object
+    res.send('File uploaded successfully');
+});
+
+
 // pictures API endpoints
 // router.post('/picture/sharePicture', (upload as Multer).single('image'), pictureCtrl.sharePicture);
+
 router.get('/picture/getPicture/:pictureId', pictureCtrl.getPictureById)
 // create a post feed of all users
 router.get('/users-posts', pictureCtrl.getAllPosts)

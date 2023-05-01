@@ -29,25 +29,6 @@ import multer from "multer"
  * @param {string} req.body.description Description
  * @param {Object} req.file Content of post
  */
-var upload = multer({ dest: "./uploads" });
-var mongo = require('mongodb');
-var Grid = require("gridfs-stream");
-Grid.mongo = mongo;
-
-router.post('/picture/:id', upload.array('photos', 200), function (req, res, next) {
-   let  gfs = Grid(db);
-    var ss = req.files;
-    for (var j = 0; j < ss.length; j++) {
-        var originalName = ss[j].originalname;
-        var filename = ss[j].filename;
-    let writestream = gfs.createWriteStream({
-            bucketname: 'fs',
-            filename: originalName
-        });
-        fs.createReadStream("./uploads/" + filename).pipe(writestream);
-    }
-});
-
 
 export  function sharePicture(req: Request, res: Response) {
     if (!req.body.userId || !req.body.description || !req.image) {
