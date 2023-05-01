@@ -10,8 +10,7 @@ import * as userCtrl from "../controllers/user_controller"
 import * as pictureCtrl from "../controllers/picture_controller"
 import * as searchCtrl from '../controllers/search_controller'
 import * as feedback from '../controllers/feedback_controller'
-import { upload } from "../config/images";
-import { Multer } from 'multer';
+
 
 
 
