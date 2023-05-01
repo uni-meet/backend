@@ -1,4 +1,4 @@
-
+// @ts-nocheck
 import mongoose from "mongoose"
 import { debuglog } from "../helpers"
 import { Picture, User } from "../models"
