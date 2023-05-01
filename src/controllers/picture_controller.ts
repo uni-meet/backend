@@ -29,14 +29,14 @@ import { db } from "../config"
  */
 export  function sharePicture(req: Request, res: Response) {
     if (!req.body.userId || !req.body.description || !req.file) {
-        res.status(400).json({ result: 'error', message: 'Unsatisfied requirements for posting a picture' })
-        return
-    }
+        res.status(400).json({ result: 'error', message: 'Unsatisfied requirements for posting a picture' });
+        return;
+    }   
     const body = {
         userId: new mongoose.Types.ObjectId(req.body.userId),
         description: req.body.description,
         pictureImage: req.file.filename
-    }
+    };
     //NOTE - function User.findOne always compares _id with userId !!!
     User.findOne({ _id: body.userId, isDeleted: false })
         .then(async (foundUser) => {
