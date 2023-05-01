@@ -15,7 +15,6 @@ const app: Application = express();
 
 
 
-
 const PORT: any = process.env.PORT || 8082; // change to port
 /* startup server */
 connectDB() // connect to database

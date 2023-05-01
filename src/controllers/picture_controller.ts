@@ -1,4 +1,4 @@
-// @ts-nocheck
+
 import mongoose from "mongoose"
 import { debuglog } from "../helpers"
 import { Picture, User } from "../models"
@@ -6,6 +6,8 @@ import { Like } from "../models/like_model"
 import { Comment } from "../models/comment_model"
 import { Request, Response } from "express"
 import { db } from "../config"
+import { router } from "../routes"
+import multer from "multer"
 
 /**
  * @fileoverview This file contains all controller functions for pictures.
@@ -27,6 +29,26 @@ import { db } from "../config"
  * @param {string} req.body.description Description
  * @param {Object} req.file Content of post
  */
+var upload = multer({ dest: "./uploads" });
+var mongo = require('mongodb');
+var Grid = require("gridfs-stream");
+Grid.mongo = mongo;
+
+router.post('/picture/:id', upload.array('photos', 200), function (req, res, next) {
+   let  gfs = Grid(db);
+    var ss = req.files;
+    for (var j = 0; j < ss.length; j++) {
+        var originalName = ss[j].originalname;
+        var filename = ss[j].filename;
+    let writestream = gfs.createWriteStream({
+            bucketname: 'fs',
+            filename: originalName
+        });
+        fs.createReadStream("./uploads/" + filename).pipe(writestream);
+    }
+});
+
+
 export  function sharePicture(req: Request, res: Response) {
     if (!req.body.userId || !req.body.description || !req.image) {
         res.status(400).json({ result: 'error', message: 'Unsatisfied requirements for posting a picture' })
