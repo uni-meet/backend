@@ -29,6 +29,7 @@ import { getGridFSBucket } from "../config/gridfs";
  * @param {Object} req.file Content of post
  */
 export async function sharePicture(req: Request, res: Response) {
+    console.log("sharePicture route called")
   if (!req.body.userId || !req.body.description || !req.file) {
     res
       .status(400)
