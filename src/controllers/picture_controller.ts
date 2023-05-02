@@ -29,20 +29,23 @@ import { getGridFSBucket } from "../config/gridfs";
  * @param {Object} req.file Content of post
  */
 export async function sharePicture(req: Request, res: Response) {
-  try {
-    if (!req.body.userId || !req.body.description || !req.file) {
-      res.status(400).json({ result: 'error', message: 'Unsatisfied requirements for posting a picture' });
-      return;
-    }
-    const body = {
-      userId: new mongoose.Types.ObjectId(req.body.userId),
-      description: req.body.description,
-      pictureImage: req.file.id
-    };
+  if (!req.body.userId || !req.body.description || !req.file) {
+    res
+      .status(400)
+      .json({ result: 'error', message: 'Unsatisfied requirements for posting a picture' });
+    return;
+  }
+  const body = {
+    userId: new mongoose.Types.ObjectId(req.body.userId),
+    description: req.body.description,
+    pictureImagePath: req.file.path,
+  };
 
+  try {
     const foundUser = await User.findOne({ _id: body.userId, isDeleted: false });
 
     if (!foundUser) {
+      debuglog('ERROR', 'picture controller - share(post)', 'user not found');
       res.status(404).json({ result: 'error', message: 'User not found.' });
       return;
     }
@@ -50,7 +53,8 @@ export async function sharePicture(req: Request, res: Response) {
     const picture = new Picture(body, { comments: [], likes: [] });
     await picture.save();
 
-    console.log("Saved picture:", picture);
+    console.log('Saved picture:', picture);
+
     if (!foundUser.pictures) {
       // if user has no array of pictures, initialize new array
       foundUser.pictures = [];
@@ -59,18 +63,18 @@ export async function sharePicture(req: Request, res: Response) {
     }
 
     // if user has an array of pictures, then save the id of picture and push to an array
-    foundUser.pictures.push(picture._id)
+    foundUser.pictures.push(picture._id);
     await foundUser.save();
 
+    debuglog('LOG', 'picture controller - sharePicture', 'picture  posted');
     res.status(201).json({
-      result: "success",
-      message: "New picture posted",
-      pictureId: picture._id
+      result: 'success',
+      message: 'New picture posted',
+      pictureId: picture._id,
     });
-
   } catch (error) {
-    console.error("Error in sharePicture:", error);
-    res.status(500).json({ error: "An error occurred while sharing the picture." });
+    debuglog('ERROR', 'picture controller - sharePicture', error);
+    res.status(500).json({ result: 'error', message: 'An error occurred while sharing the picture.' });
   }
 }
 

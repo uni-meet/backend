@@ -12,18 +12,16 @@ import MulterGridfsStorage from "multer-gridfs-storage";
 // import env variables
 
 
-const url: any = process.env.MONGODB_URI;
-const storage = new MulterGridfsStorage({
-    url,
-    file: (req: any, image: any) => {
-        return {
-            bucketName: 'fs',
-            filename: new Date().toISOString() + image.originalname
-        }
-    }
-});
-
-export const upload = multer({
-    storage
-})
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+      cb(null, "./uploads/");
+    },
+    filename: (req, file, cb) => {
+      cb(null, new Date().toISOString() + "-" + file.originalname);
+    },
+  });
+  
+  export const upload = multer({
+    storage,
+  });
 
