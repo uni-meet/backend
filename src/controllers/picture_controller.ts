@@ -29,8 +29,6 @@ import { getGridFSBucket } from "../config/gridfs";
  * @param {Object} req.file Content of post
  */
 export async function sharePicture(req: Request, res: Response) {
-  console.log("sharePicture request body:", JSON.stringify(req.body, null, 2)); // Added line
-
   if (!req.body.userId || !req.body.description || !req.file) {
     res
       .status(400)
@@ -40,7 +38,7 @@ export async function sharePicture(req: Request, res: Response) {
   const body = {
     userId: new mongoose.Types.ObjectId(req.body.userId),
     description: req.body.description,
-    pictureImagePath: req.file.path,
+    pictureImagePath: req.file.filename, // Use the filename from GridFS
   };
 
   try {
