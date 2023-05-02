@@ -37,6 +37,9 @@ app.use(express.static('uploads'))
 app.get('/api/test', (req: Request, res: Response) => {
     res.send('Test route is working');
   });
+  app.get('/', (req: Request, res: Response) => {
+    res.send('Welcome to the root URL');
+  });
 app.listen(PORT, (): void => { // TODO: Study how to pass host
     debuglog('LOG', 'server', `Server is listening on port ${PORT}`)
     console.log('Server working on http://localhost:8082')
