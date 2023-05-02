@@ -28,49 +28,50 @@ import { getGridFSBucket } from "../config/gridfs";
  * @param {string} req.body.description Description
  * @param {Object} req.file Content of post
  */
-export  function sharePicture(req: Request, res: Response) {
+export async function sharePicture(req: Request, res: Response) {
+  try {
     if (!req.body.userId || !req.body.description || !req.file) {
-        res.status(400).json({ result: 'error', message: 'Unsatisfied requirements for posting a picture' });
-        return;
-    }   
+      res.status(400).json({ result: 'error', message: 'Unsatisfied requirements for posting a picture' });
+      return;
+    }
     const body = {
-        userId: new mongoose.Types.ObjectId(req.body.userId),
-        description: req.body.description,
-        pictureImage: req.file.id
+      userId: new mongoose.Types.ObjectId(req.body.userId),
+      description: req.body.description,
+      pictureImage: req.file.id
     };
-    //NOTE - function User.findOne always compares _id with userId !!!
-    User.findOne({ _id: body.userId, isDeleted: false })
-        .then(async (foundUser) => {
-            if (!foundUser) {
-                debuglog('ERROR', 'picture controller - share(post)', 'user not found');
-                res.status(404).json({ result: 'error', message: 'User not found.' });
-                return;
-            }
-            const picture = new Picture(body, { comments: [], likes: [] });
-            await picture.save();
 
-            console.log("Saved picture:", picture);
-            if (!foundUser.pictures) {
-                // if user has no array of pictures, initialize new array
-                foundUser.pictures = [],
-                    foundUser.comments = [],
-                    likes = []
-            }
-            // if user has an array of pictures, then save the id of picture and push to an array
-            foundUser.pictures.push(picture._id)
-            foundUser.save()
-            debuglog('LOG', 'picture controller - sharePicture', 'picture  posted')
-            res.status(201).json({
-                result: "success",
-                message: "New picture posted",
-                pictureId: picture._id
-              });
-        }).catch(error => {
-            debuglog('ERROR', 'picture controller - sharePicture', error)
-            res.status(400).json(error)
+    const foundUser = await User.findOne({ _id: body.userId, isDeleted: false });
 
-        })
+    if (!foundUser) {
+      res.status(404).json({ result: 'error', message: 'User not found.' });
+      return;
+    }
 
+    const picture = new Picture(body, { comments: [], likes: [] });
+    await picture.save();
+
+    console.log("Saved picture:", picture);
+    if (!foundUser.pictures) {
+      // if user has no array of pictures, initialize new array
+      foundUser.pictures = [];
+      foundUser.comments = [];
+      foundUser.likes = [];
+    }
+
+    // if user has an array of pictures, then save the id of picture and push to an array
+    foundUser.pictures.push(picture._id)
+    await foundUser.save();
+
+    res.status(201).json({
+      result: "success",
+      message: "New picture posted",
+      pictureId: picture._id
+    });
+
+  } catch (error) {
+    console.error("Error in sharePicture:", error);
+    res.status(500).json({ error: "An error occurred while sharing the picture." });
+  }
 }
 
 /** @function get a picture by it`s id
