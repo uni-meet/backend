@@ -36,7 +36,7 @@ export  function sharePicture(req: Request, res: Response) {
     const body = {
         userId: new mongoose.Types.ObjectId(req.body.userId),
         description: req.body.description,
-        pictureImage: req.file.filename
+        pictureImage: req.file.id
     };
     //NOTE - function User.findOne always compares _id with userId !!!
     User.findOne({ _id: body.userId, isDeleted: false })
