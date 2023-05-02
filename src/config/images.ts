@@ -17,10 +17,10 @@ import { Request } from 'express';
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const GridFsStorage = require('multer-gridfs-storage');
 
-const mongoURI = process.env.MONGO_CONNECTION_URI;
+const MONGODB_URI = process.env.MONGODB_URI;
 
 const storage = new GridFsStorage({
-  url: mongoURI,
+  url: MONGODB_URI,
   file: (req: Request, file: Express.Multer.File) => {
     return {
       filename: Date.now() + '-' + file.originalname,
