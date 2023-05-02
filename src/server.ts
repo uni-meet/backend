@@ -34,6 +34,9 @@ app.use(
 app.use(body_parser.urlencoded({ extended: true }))
 app.use('/api', router)  // all api routes will follow 'https://localhost:PORT/api/ENDPOINTS' format
 app.use(express.static('uploads'))
+app.get('/api/test', (req: Request, res: Response) => {
+    res.send('Test route is working');
+  });
 app.listen(PORT, (): void => { // TODO: Study how to pass host
     debuglog('LOG', 'server', `Server is listening on port ${PORT}`)
     console.log('Server working on http://localhost:8082')
