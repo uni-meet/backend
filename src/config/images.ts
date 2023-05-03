@@ -18,7 +18,7 @@ import { Request } from 'express';
 const GridFsStorage = require('multer-gridfs-storage');
 
 
-const MONGODB_URI = "mongodb+srv://adminAll:adminAll@cluster0.mongodb.net/newDB?retryWrites=true&w=majority";
+const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/instaclone';
 const conn = mongoose.createConnection(MONGODB_URI);
 
 const storage = new GridFsStorage({
