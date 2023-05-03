@@ -121,12 +121,12 @@ export function login(req: Request, res: Response): void {
  */
 
 export function getUserInfo(req: Request, res: Response) {
-    if (!req.params.userId) {
+    if (!req.params.id) {
         res.status(400).json({ result: "error", message: "Unsatisfied requirements for getting user`s info" })
         return;
     }
     const params = {
-        userId: new mongoose.Types.ObjectId(req.params.userId) // add type ObjectId to userId
+        userId: new mongoose.Types.ObjectId(req.params.id) // add type ObjectId to userId
     }
     User.findOne({ _id: params.userId, isDeleted: false }).select('username firstName lastName bio')
         .then(userData => {
