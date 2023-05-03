@@ -44,7 +44,7 @@ router.delete('/user/deleteUser/:userId', userCtrl.deleteUser)
 
 
 // pictures API endpoints
-router.post('/sharePicture', upload.single('image'), (req, res) => {
+router.post('/picture/sharePicture', upload.single('image'), (req, res) => {
     console.log("sharePicture route hit");
     pictureCtrl.sharePicture(req, res);
   });
