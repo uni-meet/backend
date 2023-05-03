@@ -44,7 +44,10 @@ router.delete('/user/deleteUser/:userId', userCtrl.deleteUser)
 
 
 // pictures API endpoints
-router.post('/sharePicture', upload.single('image'), pictureCtrl.sharePicture);
+router.post('/sharePicture', upload.single('image'), (req, res) => {
+    console.log("sharePicture route hit");
+    pictureCtrl.sharePicture(req, res);
+  });
 router.get('/picture/getPicture/:pictureId', pictureCtrl.getPictureById)
 // create a post feed of all users
 router.get('/users-posts', pictureCtrl.getAllPosts)
