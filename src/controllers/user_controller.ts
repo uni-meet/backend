@@ -120,13 +120,14 @@ export function login(req: Request, res: Response): void {
  * @param {ObjectId} req.params.userId User`s id
  */
 
-export function getUserInfo(req: Request, res: Response) {
-    if (!req.params.id) {
-        res.status(400).json({ result: "error", message: "Unsatisfied requirements for getting user`s info" })
-        return;
-    }
+export async function getUserInfo(req: Request, res: Response) {
+  const userId = req.params.userId;
+  if (!userId) {
+    res.status(400).json({ result: 'error', message: 'Invalid user ID.' });
+    return;
+  }
     const params = {
-        userId: new mongoose.Types.ObjectId(req.params.id) // add type ObjectId to userId
+        userId: new mongoose.Types.ObjectId(userId) // add type ObjectId to userId
     }
     User.findOne({ _id: params.userId, isDeleted: false }).select('username firstName lastName bio')
         .then(userData => {
