@@ -53,8 +53,8 @@ router.get('/picture/getPicture/:pictureId', pictureCtrl.getPictureById)
 router.get('/users-posts', pictureCtrl.getAllPosts)
 router.delete('/picture/deletePicture/:pictureId', pictureCtrl.deletePicture)
 
-
-
+//test upload
+router.post('/testUpload', upload.single('image'), pictureCtrl.testUpload);
 
 // Like and comment
 router.post('/picture/like', pictureCtrl.likePicture);

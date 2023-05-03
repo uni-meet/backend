@@ -286,3 +286,14 @@ export async function likePicture(req: Request, res: Response) {
         return res.status(500).json({ error: 'Internal server error' });
     }
 }
+
+
+export const testUpload = (req: Request, res: Response): void => {
+    const { file } = req;
+    if (!file) {
+      res.status(400).json({ error: 'No image provided' });
+      return;
+    }
+  
+    res.status(200).json({ message: 'Image uploaded', imageUrl: file.path });
+  };
