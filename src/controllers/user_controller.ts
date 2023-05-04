@@ -64,7 +64,7 @@ export function signup(req: Request, res: Response): void {
             // create a file for token declaration in helpers folder
             const token = createToken(newUser)
             res.header('auth-token', token);
-            res.status(201).json({ result: "success", message: "User signup" })
+            res.status(201).json({ result: "success", message: "User signup", userId: newUser._id })
         }).catch((error) => {
             if (error.code == 11000) {
                 return res.status(400).json({ result: 'failed', message: 'User already exists' })
